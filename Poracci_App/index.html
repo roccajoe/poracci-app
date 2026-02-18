@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CasaCalc">
+<meta name="theme-color" content="#1b4332">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>CasaCalc — Calcolatore Acquisto Casa</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;overflow-x:hidden;font-family:'DM Sans',sans-serif;-webkit-tap-highlight-color:transparent}
+input{box-sizing:border-box;max-width:100%}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent}
+#root{min-height:100vh;min-height:100dvh}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useCallback } = React;
+
+/* ═══════════════ STORAGE ═══════════════ */
+const LS = {
+  get: (k, def) => { try { const v = localStorage.getItem('cc_' + k); return v ? JSON.parse(v) : def; } catch { return def; } },
+  set: (k, v) => { try { localStorage.setItem('cc_' + k, JSON.stringify(v)); } catch {} },
+};
+
+/* ═══════════════ HELPERS ═══════════════ */
+const fmt = (n) => n === 0 ? "€0" : new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n);
+const pct = (v, min, max) => Math.max(0, Math.min(100, ((v - min) / (max - min)) * 100));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+
+/* ═══════════════ UI ATOMS ═══════════════ */
+const Section = ({ title, icon, children, color = "#2d6a4f", collapsed, onToggle, badge }) => (
+  <div style={{ background: "#fff", borderRadius: 16, marginBottom: 14, overflow: "hidden", border: `1px solid ${color}22`, boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}>
+    <div onClick={onToggle} style={{ display: "flex", alignItems: "center", gap: 10, padding: "14px 16px", cursor: "pointer", background: `${color}08`, borderBottom: collapsed ? "none" : `1px solid ${color}15`, userSelect: "none" }}>
+      <span style={{ fontSize: 20 }}>{icon}</span>
+      <span style={{ fontWeight: 700, fontSize: 15, color, flex: 1 }}>{title}</span>
+      {badge && <span style={{ fontSize: 10, fontWeight: 700, background: color + "18", color, padding: "2px 8px", borderRadius: 10 }}>{badge}</span>}
+      <span style={{ color: color + "88", fontSize: 16, transition: "transform 0.2s", transform: collapsed ? "rotate(-90deg)" : "rotate(0deg)" }}>▼</span>
+    </div>
+    {!collapsed && <div style={{ padding: "14px 16px" }}>{children}</div>}
+  </div>
+);
+
+const Field = ({ label, value, onChange, suffix, type = "number", hint, min, step, disabled }) => (
+  <div style={{ marginBottom: 12, minWidth: 0 }}>
+    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#555", marginBottom: 3 }}>{label}</label>
+    <div style={{ display: "flex", alignItems: "center", gap: 4, minWidth: 0 }}>
+      <input type={type} inputMode={type === "number" ? "decimal" : undefined} value={value} onChange={(e) => onChange(type === "number" ? parseFloat(e.target.value) || 0 : e.target.value)} min={min} step={step || 1} disabled={disabled}
+        style={{ width: "100%", minWidth: 0, boxSizing: "border-box", padding: "9px 10px", borderRadius: 8, border: "1px solid #ddd", fontFamily: type === "text" ? "'DM Sans',sans-serif" : "'DM Mono',monospace", fontSize: 16, fontWeight: 500, outline: "none", background: disabled ? "#eee" : "#fafafa" }} />
+      {suffix && <span style={{ fontSize: 12, color: "#888", fontWeight: 500, flexShrink: 0 }}>{suffix}</span>}
+    </div>
+    {hint && <span style={{ fontSize: 10, color: "#999", marginTop: 2, display: "block" }}>{hint}</span>}
+  </div>
+);
+
+const Toggle = ({ label, checked, onChange }) => (
+  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, cursor: "pointer" }} onClick={() => onChange(!checked)}>
+    <div style={{ width: 40, height: 22, borderRadius: 11, background: checked ? "#2d6a4f" : "#ccc", position: "relative", flexShrink: 0, transition: "background 0.2s" }}>
+      <div style={{ width: 18, height: 18, borderRadius: 9, background: "#fff", position: "absolute", top: 2, left: checked ? 20 : 2, transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.2)" }} />
+    </div>
+    <span style={{ fontSize: 13, fontWeight: 600, color: "#333" }}>{label}</span>
+  </div>
+);
+
+const CostRow = ({ label, value, detail, highlight, deductible }) => (
+  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "7px 0", borderBottom: "1px solid #f0f0f0", gap: 8 }}>
+    <div style={{ flex: 1, minWidth: 0 }}>
+      <span style={{ fontSize: 12, color: highlight ? "#b5651d" : "#444", fontWeight: highlight ? 700 : 500 }}>{label}</span>
+      {detail && <span style={{ display: "block", fontSize: 10, color: "#999" }}>{detail}</span>}
+      {deductible && <span style={{ display: "inline-block", fontSize: 9, background: "#e8f5e9", color: "#2e7d32", padding: "1px 5px", borderRadius: 4, marginTop: 1 }}>Detraibile</span>}
+    </div>
+    <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 13, fontWeight: 600, color: highlight ? "#b5651d" : "#333", flexShrink: 0 }}>{fmt(value)}</span>
+  </div>
+);
+
+/* ═══════════════ SLIDER ═══════════════ */
+const Slider = ({ label, value, onChange, min = 0, max = 500000, step = 5000, color = "#2d6a4f" }) => {
+  const ratio = pct(value, min, max);
+  return (
+    <div style={{ marginBottom: 18 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
+        <label style={{ fontSize: 12, fontWeight: 600, color: "#555" }}>{label}</label>
+        <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 20, fontWeight: 800, color }}>{fmt(value)}</span>
+      </div>
+      <div style={{ position: "relative", height: 36, display: "flex", alignItems: "center" }}>
+        <div style={{ position: "absolute", left: 0, right: 0, height: 8, background: "#e8e8e8", borderRadius: 4 }}>
+          <div style={{ height: "100%", width: `${ratio}%`, background: `linear-gradient(90deg, ${color}88, ${color})`, borderRadius: 4, transition: "width 0.05s" }} />
+        </div>
+        <input type="range" min={min} max={max} step={step} value={value}
+          onChange={(e) => onChange(Number(e.target.value))}
+          style={{ position: "absolute", left: 0, right: 0, width: "100%", height: 36, opacity: 0, cursor: "pointer", margin: 0, zIndex: 2 }} />
+        <div style={{ position: "absolute", left: `calc(${ratio}% - 16px)`, width: 32, height: 32, borderRadius: 16, background: "#fff", border: `3px solid ${color}`, boxShadow: "0 2px 10px rgba(0,0,0,0.18)", pointerEvents: "none", transition: "left 0.05s", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 10, height: 10, borderRadius: 5, background: color }} />
+        </div>
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 9, color: "#bbb", marginTop: 4 }}>
+        <span>{fmt(min)}</span><span>{fmt(max)}</span>
+      </div>
+    </div>
+  );
+};
+
+/* ═══════════════ TIER ═══════════════ */
+const TIER = { eco: "Economica", med: "Media", pre: "Pregio" };
+const TCOL = { eco: "#4caf50", med: "#ff9800", pre: "#9c27b0" };
+const TierPick = ({ value, onChange }) => (
+  <div style={{ display: "flex", gap: 4, marginBottom: 14 }}>
+    {["eco", "med", "pre"].map(t => (
+      <div key={t} onClick={() => onChange(t)} style={{ flex: 1, textAlign: "center", padding: "8px 4px", borderRadius: 8, cursor: "pointer", background: value === t ? TCOL[t] + "18" : "#f5f5f5", border: `2px solid ${value === t ? TCOL[t] : "transparent"}`, fontWeight: value === t ? 700 : 500, fontSize: 12, color: value === t ? TCOL[t] : "#888", WebkitTapHighlightColor: "transparent" }}>
+        {TIER[t]}
+      </div>
+    ))}
+  </div>
+);
+
+const InfoBubble = ({ children, color = "#2d6a4f" }) => {
+  const [open, setOpen] = useState(false);
+  return (<>
+    <div onClick={(e) => { e.stopPropagation(); setOpen(!open); }} style={{ width: 22, height: 22, borderRadius: 11, background: open ? color : "#e8e8e8", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, cursor: "pointer" }}>
+      <span style={{ fontSize: 12, fontWeight: 700, color: open ? "#fff" : "#888", lineHeight: 1 }}>i</span>
+    </div>
+    {open && (
+      <div onClick={(e) => e.stopPropagation()} style={{ position: "absolute", left: 0, right: 0, top: "100%", zIndex: 10, marginTop: 4, background: "#fff", borderRadius: 12, padding: 14, boxShadow: "0 8px 32px rgba(0,0,0,0.15)", border: "1px solid #e0e0e0" }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 4 }}>
+          <div onClick={() => setOpen(false)} style={{ width: 24, height: 24, borderRadius: 12, background: "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}><span style={{ fontSize: 14, color: "#666" }}>✕</span></div>
+        </div>
+        {children}
+      </div>
+    )}
+  </>);
+};
+
+/* ═══════════════ DATA ═══════════════ */
+const RENO = [
+  { id: "elett", label: "Imp. Elettrico", icon: "⚡", type: "sqm", t: { eco: 45, med: 65, pre: 90 }, info: { eco: "BTicino Living base", med: "BTicino Matix/Vimar, quadro evoluto", pre: "Domotica, Axolute, smart" }, note: "Cavi, quadro, punti luce, certificazione" },
+  { id: "idra", label: "Imp. Idraulico", icon: "🔧", type: "sqm", t: { eco: 40, med: 55, pre: 75 }, info: { eco: "Multistrato base", med: "Multistrato qualità, collettori", pre: "PEX-a, addolcitore" }, note: "Tubazioni, allacci, scarichi, collaudo" },
+  { id: "pav", label: "Pavimenti", icon: "🏗", type: "sqm", t: { eco: 50, med: 80, pre: 130 }, info: { eco: "Gres porcellanato base + posa", med: "Gres rettificato + posa", pre: "Effetto marmo / parquet massello" }, note: "Rimozione, massetto, fornitura, posa, battiscopa" },
+  { id: "bagno", label: "Rifac. Bagno", icon: "🚿", type: "bath", t: { eco: 5000, med: 8000, pre: 12000 }, info: { eco: "Ideal Standard base, box std", med: "Sospesi, filo pavimento, Grohe", pre: "Duravit/Flaminia, Hansgrohe" }, note: "Demolizione, sanitari, rubinetteria, piastrelle" },
+  { id: "cuc_imp", label: "Imp. Cucina", icon: "🍳", type: "fix", t: { eco: 3000, med: 4000, pre: 5500 }, info: { eco: "Predisposizione base", med: "Completa con cappa, prese dedicate", pre: "Certificata, ventilaz. forzata" }, note: "Acqua, scarico, gas, prese elettriche" },
+  { id: "imb", label: "Imbiancatura", icon: "🎨", type: "sqm", t: { eco: 10, med: 15, pre: 25 }, info: { eco: "2 mani bianca", med: "Rasatura, pittura lavabile", pre: "Farrow&Ball, effetti decorativi" }, note: "Preparazione, stuccatura, tinteggiatura" },
+  { id: "inf", label: "Infissi", icon: "🪟", type: "inf", t: { eco: 700, med: 1200, pre: 1800 }, info: { eco: "PVC base doppio vetro", med: "PVC/alluminio taglio termico", pre: "Legno-alluminio, triplo vetro" }, note: "Rimozione, fornitura, controtelaio, posa" },
+  { id: "port", label: "Porte Interne", icon: "🚪", type: "por", t: { eco: 300, med: 500, pre: 800 }, info: { eco: "Tamburata laminato", med: "Laccata, maniglie cromate", pre: "Massella, maniglie design" }, note: "Porta, controtelaio, coprifili, maniglia" },
+  { id: "risc", label: "Riscaldamento", icon: "🌡", type: "sqm", t: { eco: 60, med: 80, pre: 110 }, info: { eco: "Caldaia base, radiatori alluminio", med: "Vaillant/Baxi, radiatori design", pre: "Premium, a pavimento, smart" }, note: "Caldaia, radiatori, tubazioni, termostato" },
+  { id: "cond", label: "Condizionamento", icon: "❄️", type: "ac", t: { eco: 1000, med: 1500, pre: 2200 }, info: { eco: "Hisense/Midea A+", med: "Daikin/Mitsubishi A++", pre: "Daikin Perfera wifi design" }, note: "Unità int+est, tubazioni, staffa, gas" },
+  { id: "mur", label: "Mod. Murature", icon: "🧱", type: "fix", t: { eco: 3000, med: 5000, pre: 8000 }, info: { eco: "Demolizione 1-2 tramezzi", med: "Redistribuzione ambienti", pre: "Complessa, archi, pareti attrezzate" }, note: "Demolizioni, smaltimento, nuove pareti" },
+  { id: "cont", label: "Controsoffitti", icon: "📐", type: "sqm", t: { eco: 30, med: 45, pre: 65 }, info: { eco: "Cartongesso singola lastra", med: "Doppia lastra, faretti", pre: "Sagomato, LED integrati" }, note: "Struttura, lastre, stuccatura, rasatura" },
+];
+
+const FURN = [
+  { id: "m_bag", label: "Mobile Bagno", icon: "🪞", type: "bath", t: { eco: 500, med: 1000, pre: 1800 }, info: { eco: "IKEA Godmorgon", med: "IKEA Hemnes premium", pre: "Idea Group / Scavolini" }, note: "Lavabo, specchio, colonna" },
+  { id: "cuc_a", label: "Cucina completa", icon: "🍽", type: "fix", t: { eco: 3000, med: 5500, pre: 10000 }, info: { eco: "IKEA Knoxhult, Mondo Conv.", med: "IKEA Metod, Creo/Lube", pre: "Scavolini/Veneta, quarzo" }, note: "Basi, pensili, top, lavello. No elettrodom." },
+  { id: "edom", label: "Elettrodomestici", icon: "🔌", type: "fix", t: { eco: 2000, med: 3200, pre: 5000 }, info: { eco: "IKEA/Indesit/Candy", med: "Bosch/Electrolux induzione", pre: "Siemens/Miele/Neff premium" }, note: "Cottura, forno, frigo, lavast., cappa" },
+  { id: "lav", label: "Lavatrice", icon: "🫧", type: "fix", t: { eco: 300, med: 400, pre: 600 }, info: { eco: "Candy/Indesit 8kg", med: "Samsung/LG 9kg", pre: "Bosch/Miele AutoDose" }, note: "Carica frontale" },
+  { id: "asc2", label: "Asciugatrice", icon: "💨", type: "fix", t: { eco: 320, med: 420, pre: 600 }, info: { eco: "Candy/Beko A+", med: "Samsung/LG A++", pre: "Bosch/Miele A+++" }, note: "Pompa di calore" },
+];
+
+const renoQty = (it, mq, nB, nI, nP, nA) => ({ sqm: mq, fix: 1, bath: nB, inf: nI, por: nP, ac: nA }[it.type] || 1);
+const furnQty = (it, nB) => it.type === "bath" ? nB : 1;
+
+const ItemRow = ({ item, on, toggle, tier, qty, accent }) => {
+  const cost = item.t[tier] * qty;
+  return (
+    <div style={{ position: "relative", marginBottom: 6 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <div onClick={toggle} style={{ display: "flex", alignItems: "center", gap: 8, flex: 1, cursor: "pointer", minWidth: 0, WebkitTapHighlightColor: "transparent" }}>
+          <div style={{ width: 40, height: 22, borderRadius: 11, background: on ? accent : "#ccc", position: "relative", flexShrink: 0 }}>
+            <div style={{ width: 18, height: 18, borderRadius: 9, background: "#fff", position: "absolute", top: 2, left: on ? 20 : 2, transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.2)" }} />
+          </div>
+          <span style={{ fontSize: 13, fontWeight: 600, color: "#333", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.icon} {item.label}</span>
+        </div>
+        {on && <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, fontWeight: 600, color: accent, background: accent + "15", padding: "2px 6px", borderRadius: 6, flexShrink: 0 }}>{fmt(cost)}</span>}
+        <InfoBubble color={accent}>
+          <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 8 }}>{item.icon} {item.label}</div>
+          <div style={{ background: "#f8f9fa", borderRadius: 8, padding: 10, marginBottom: 8 }}>
+            {["eco", "med", "pre"].map(t => (
+              <div key={t} style={{ display: "flex", justifyContent: "space-between", padding: "3px 0", fontWeight: t === tier ? 700 : 400, color: t === tier ? TCOL[t] : "#666", fontSize: 12 }}>
+                <span>{t === tier ? "▸ " : ""}{TIER[t]}</span>
+                <span style={{ fontFamily: "'DM Mono',monospace" }}>{fmt(item.t[t])}{item.type === "sqm" ? "/mq" : item.type === "fix" ? "" : "/un"}</span>
+              </div>
+            ))}
+            <div style={{ marginTop: 6, fontSize: 14, fontWeight: 800, color: TCOL[tier], fontFamily: "'DM Mono',monospace" }}>= {fmt(cost)}</div>
+          </div>
+          {["eco", "med", "pre"].map(t => <div key={t} style={{ fontSize: 10, color: t === tier ? "#333" : "#aaa", marginBottom: 2, fontWeight: t === tier ? 600 : 400 }}><span style={{ color: TCOL[t] }}>●</span> {item.info[t]}</div>)}
+          <div style={{ fontSize: 10, color: "#555", marginTop: 6 }}><strong>Include:</strong> {item.note}</div>
+        </InfoBubble>
+      </div>
+    </div>
+  );
+};
+
+/* ═══════════════ DISCOUNT BADGE ═══════════════ */
+const DiscountBadge = ({ prezzo, offerta }) => {
+  if (!offerta || !prezzo || offerta >= prezzo) return null;
+  const sconto = prezzo - offerta;
+  const p = (sconto / prezzo) * 100;
+  return (
+    <div style={{ background: "linear-gradient(135deg, #e8f5e9, #c8e6c9)", borderRadius: 10, padding: "10px 14px", marginBottom: 12, display: "flex", alignItems: "center", justifyContent: "space-between", border: "1px solid #a5d6a7" }}>
+      <div>
+        <div style={{ fontSize: 11, fontWeight: 600, color: "#2e7d32" }}>📉 Sconto proposto</div>
+        <div style={{ fontSize: 10, color: "#558b2f" }}>{fmt(prezzo)} → {fmt(offerta)}</div>
+      </div>
+      <div style={{ textAlign: "right" }}>
+        <div style={{ fontSize: 24, fontWeight: 800, color: "#2e7d32", fontFamily: "'DM Mono',monospace" }}>-{p.toFixed(1)}%</div>
+        <div style={{ fontSize: 10, color: "#558b2f" }}>-{fmt(sconto)}</div>
+      </div>
+    </div>
+  );
+};
+
+/* ═══════════════ EMPTY EVAL ═══════════════ */
+const emptyEval = () => ({
+  id: uid(), label: "", url: "", prezzoRich: 0, offerta: 0, rendita: 0,
+  mqC: 0, mqP: 0, autoMq: true, nB: 1, nI: 5, nP: 4, nA: 2,
+  piano: "", asc: false, anno: 0, rT: "med", fT: "med", rOn: {}, fOn: {}, savedAt: null,
+});
+
+/* ═══════════════ MAIN APP ═══════════════ */
+function App() {
+  const [sec, setSec] = useState({ budget: true, prop: false, reno: true, arredo: true, costs: true, result: false });
+  const tog = (s) => setSec(p => ({ ...p, [s]: !p[s] }));
+
+  const [mutuo, setMutuo] = useState(() => LS.get('mutuo', 200000));
+  const [liq, setLiq] = useState(() => LS.get('liq', 180000));
+  const BUDGET = mutuo + liq;
+
+  const [saved, setSaved] = useState(() => LS.get('saved', []));
+  const [cur, setCur] = useState(() => LS.get('current', emptyEval()));
+  const upd = (k, v) => setCur(p => ({ ...p, [k]: v }));
+
+  /* Persist to localStorage */
+  useEffect(() => { LS.set('mutuo', mutuo); }, [mutuo]);
+  useEffect(() => { LS.set('liq', liq); }, [liq]);
+  useEffect(() => { LS.set('saved', saved); }, [saved]);
+  useEffect(() => { LS.set('current', cur); }, [cur]);
+
+  useEffect(() => { if (cur.autoMq && cur.mqC > 0) upd("mqP", Math.round(cur.mqC * 0.82)); }, [cur.mqC, cur.autoMq]);
+
+  /* Save */
+  const doSave = () => {
+    const s = { ...cur, savedAt: new Date().toISOString() };
+    if (!s.label) {
+      const bits = [];
+      if (s.prezzoRich > 0) bits.push(fmt(s.prezzoRich));
+      if (s.mqC > 0) bits.push(`${s.mqC}mq`);
+      s.label = bits.join(" · ") || `Valutazione ${saved.length + 1}`;
+    }
+    setSaved(prev => { const i = prev.findIndex(e => e.id === s.id); if (i >= 0) { const c = [...prev]; c[i] = s; return c; } return [...prev, s]; });
+  };
+  const doNew = () => { if (cur.prezzoRich > 0 || cur.offerta > 0) doSave(); setCur(emptyEval()); setSec(p => ({ ...p, prop: false })); };
+  const doLoad = (id) => { if (cur.prezzoRich > 0 || cur.offerta > 0) doSave(); const f = saved.find(e => e.id === id); if (f) setCur({ ...f }); };
+  const doDel = (id) => { setSaved(p => p.filter(e => e.id !== id)); if (cur.id === id) setCur(emptyEval()); };
+
+  /* Computed */
+  const prezzo = cur.offerta || cur.prezzoRich;
+  const mq = cur.mqP || Math.round((cur.mqC || 0) * 0.82);
+
+  let costoReno = 0;
+  RENO.forEach(i => { if (cur.rOn[i.id]) costoReno += i.t[cur.rT] * renoQty(i, mq, cur.nB, cur.nI, cur.nP, cur.nA); });
+  const spTecn = costoReno > 0 ? costoReno * 0.08 : 0;
+  const costoRenoTot = costoReno + spTecn;
+  let costoArredo = 0;
+  FURN.forEach(i => { if (cur.fOn[i.id]) costoArredo += i.t[cur.fT] * furnQty(i, cur.nB); });
+
+  const provvN = prezzo * 0.04, provvIVA = provvN * 0.22, provvT = provvN + provvIVA;
+  const valCat = cur.rendita * 115.5;
+  const impReg = cur.rendita > 0 ? Math.max(valCat * 0.02, 1000) : prezzo * 0.02;
+  const impC = 50, impI = 50, totImp = impReg + impC + impI;
+  const notaio = prezzo <= 100000 ? 2000 : prezzo <= 200000 ? 2800 : prezzo <= 300000 ? 3500 : prezzo <= 500000 ? 4200 : 5000;
+  const perizia = 350, istrutt = 500;
+  const totSpAcq = provvT + totImp + notaio + perizia + istrutt;
+  const costoTot = prezzo + totSpAcq + costoRenoTot + costoArredo;
+
+  const detrAg = Math.min(provvN * 0.19, 1000);
+  const detrReno = costoRenoTot * 0.5, detrRenoA = detrReno / 10;
+  const bmOk = costoReno > 0 && costoArredo > 0;
+  const detrMob = bmOk ? Math.min(costoArredo, 5000) * 0.5 : 0, detrMobA = detrMob / 10;
+  const detrTot = detrAg + detrReno + detrMob;
+
+  const budgNet = BUDGET - costoRenoTot - costoArredo;
+  const spFix = notaio + perizia + istrutt + impC + impI;
+  const offMax = cur.rendita > 0 ? (budgNet - spFix - Math.max(cur.rendita * 115.5 * 0.02, 1000)) / (1 + 0.0488) : (budgNet - spFix) / (1 + 0.0488 + 0.02);
+  const over = costoTot > BUDGET, marg = BUDGET - costoTot;
+
+  const toggleR = id => setCur(p => ({ ...p, rOn: { ...p.rOn, [id]: !p.rOn[id] } }));
+  const toggleF = id => setCur(p => ({ ...p, fOn: { ...p.fOn, [id]: !p.fOn[id] } }));
+
+  return (
+    <div style={{ minHeight: "100vh", minHeight: "100dvh", background: "linear-gradient(160deg, #f0f4f0 0%, #e8ede8 50%, #f5f0eb 100%)", fontFamily: "'DM Sans',sans-serif", overflowX: "hidden", width: "100%", boxSizing: "border-box" }}>
+
+      {/* HEADER */}
+      <div style={{ background: "linear-gradient(135deg, #1b4332 0%, #2d6a4f 60%, #40916c 100%)", padding: "env(safe-area-inset-top, 20px) 16px 18px", color: "#fff" }}>
+        <div style={{ maxWidth: 480, margin: "0 auto", paddingTop: 16 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+            <span style={{ fontSize: 26 }}>🏠</span>
+            <h1 style={{ margin: 0, fontSize: 20, fontWeight: 800 }}>CasaCalc</h1>
+          </div>
+          <p style={{ margin: 0, fontSize: 12, opacity: 0.8 }}>Prima casa · Roma · Privato · Agenzia 4%+IVA</p>
+        </div>
+      </div>
+
+      {/* BUDGET BAR */}
+      <div style={{ background: "#fff", borderBottom: "1px solid #e0e0e0", padding: "12px 16px" }}>
+        <div style={{ maxWidth: 480, margin: "0 auto" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, fontWeight: 600, color: "#666", marginBottom: 5 }}>
+            <span>Mutuo {fmt(mutuo)} + Liq. {fmt(liq)}</span>
+            <span style={{ color: over ? "#c62828" : "#2d6a4f", fontWeight: 700 }}>{fmt(BUDGET)}</span>
+          </div>
+          <div style={{ height: 7, background: "#e8e8e8", borderRadius: 4, overflow: "hidden" }}>
+            <div style={{ height: "100%", width: `${Math.min((costoTot / BUDGET) * 100, 100)}%`, background: over ? "linear-gradient(90deg,#ef5350,#c62828)" : "linear-gradient(90deg,#66bb6a,#2d6a4f)", borderRadius: 4, transition: "width 0.4s" }} />
+          </div>
+          {prezzo > 0 && <div style={{ display: "flex", justifyContent: "space-between", marginTop: 4, fontSize: 10 }}>
+            <span style={{ color: "#999" }}>Totale: {fmt(costoTot)}</span>
+            <span style={{ color: over ? "#c62828" : "#2d6a4f", fontWeight: 700 }}>{over ? `Sfori: ${fmt(Math.abs(marg))}` : `Margine: ${fmt(marg)}`}</span>
+          </div>}
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 480, margin: "0 auto", padding: "14px 12px 100px" }}>
+
+        {/* SAVED LIST */}
+        {saved.length > 0 && (
+          <div style={{ marginBottom: 14 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+              <span style={{ fontSize: 12, fontWeight: 700, color: "#555" }}>📁 Valutazioni salvate ({saved.length})</span>
+              <button onClick={doNew} style={{ padding: "6px 14px", borderRadius: 8, border: "none", background: "linear-gradient(135deg,#1b4332,#2d6a4f)", color: "#fff", fontSize: 11, fontWeight: 700, cursor: "pointer" }}>+ Nuova</button>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              {saved.map(ev => {
+                const active = ev.id === cur.id;
+                return (
+                  <div key={ev.id} onClick={() => doLoad(ev.id)}
+                    style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 10, cursor: "pointer", background: active ? "#e8f5e9" : "#fff", border: `2px solid ${active ? "#2d6a4f" : "#e8e8e8"}`, transition: "all 0.15s" }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: "#333", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        {ev.label || "Senza nome"}
+                      </div>
+                      <div style={{ fontSize: 10, color: "#888", marginTop: 2 }}>
+                        {ev.prezzoRich > 0 ? `Rich. ${fmt(ev.prezzoRich)}` : "—"}{ev.offerta > 0 ? ` · Off. ${fmt(ev.offerta)}` : ""}{ev.mqC > 0 ? ` · ${ev.mqC}mq` : ""}
+                      </div>
+                      {ev.url && <div style={{ fontSize: 9, color: "#aaa", marginTop: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>🔗 {ev.url.replace(/https?:\/\/(www\.)?/, "").slice(0, 50)}</div>}
+                    </div>
+                    <button onClick={(e) => { e.stopPropagation(); doDel(ev.id); }}
+                      style={{ width: 28, height: 28, borderRadius: 14, border: "none", background: "#ffebee", color: "#c62828", fontSize: 14, cursor: "pointer", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* BUDGET */}
+        <Section title="Budget Disponibile" icon="💳" color="#00695c" collapsed={sec.budget} onToggle={() => tog("budget")}>
+          <Slider label="Mutuo massimo" value={mutuo} onChange={setMutuo} min={50000} max={500000} step={5000} color="#00695c" />
+          <Slider label="Liquidità disponibile" value={liq} onChange={setLiq} min={0} max={300000} step={5000} color="#00897b" />
+          <div style={{ background: "#e0f2f1", borderRadius: 10, padding: 12, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 600, color: "#00695c" }}>BUDGET TOTALE</div>
+            <div style={{ fontSize: 28, fontWeight: 800, color: "#00695c", fontFamily: "'DM Mono',monospace" }}>{fmt(BUDGET)}</div>
+          </div>
+        </Section>
+
+        {/* DATI IMMOBILE */}
+        <Section title="Dati Immobile" icon="📋" color="#2d6a4f" collapsed={sec.prop} onToggle={() => tog("prop")}>
+          <Field label="Nome / etichetta" value={cur.label} onChange={v => upd("label", v)} type="text" hint="es: Pigneto bilocale, Via Appia trilocale..." />
+          <Field label="Link annuncio" value={cur.url} onChange={v => upd("url", v)} type="text" hint="Riferimento (opzionale)" />
+          <Field label="Prezzo richiesto" value={cur.prezzoRich || ""} onChange={v => upd("prezzoRich", v)} suffix="€" />
+          <Field label="La tua offerta" value={cur.offerta || ""} onChange={v => upd("offerta", v)} suffix="€" hint="0 = prezzo richiesto" />
+          <DiscountBadge prezzo={cur.prezzoRich} offerta={cur.offerta} />
+          <Field label="Rendita catastale" value={cur.rendita || ""} onChange={v => upd("rendita", v)} suffix="€" hint="Dalla visura" />
+          <div style={{ display: "flex", gap: 10 }}>
+            <div style={{ flex: 1, minWidth: 0 }}><Field label="MQ Comm." value={cur.mqC || ""} onChange={v => upd("mqC", v)} /></div>
+            <div style={{ flex: 1, minWidth: 0 }}><Field label="MQ Calp." value={cur.mqP || ""} onChange={v => upd("mqP", v)} hint={cur.autoMq ? "Auto" : "Man."} /></div>
+          </div>
+          <Toggle label="Auto calpestabili (x0.82)" checked={cur.autoMq} onChange={v => upd("autoMq", v)} />
+          <div style={{ display: "flex", gap: 8 }}>
+            <div style={{ flex: 1, minWidth: 0 }}><Field label="Bagni" value={cur.nB} onChange={v => upd("nB", v)} min={1} /></div>
+            <div style={{ flex: 1, minWidth: 0 }}><Field label="Infissi" value={cur.nI} onChange={v => upd("nI", v)} min={0} /></div>
+            <div style={{ flex: 1, minWidth: 0 }}><Field label="Porte" value={cur.nP} onChange={v => upd("nP", v)} min={0} /></div>
+          </div>
+          <div style={{ display: "flex", gap: 8 }}>
+            <div style={{ flex: 1, minWidth: 0 }}><Field label="Piano" value={cur.piano} onChange={v => upd("piano", v)} type="text" /></div>
+            <div style={{ flex: 1, minWidth: 0 }}><Field label="Anno" value={cur.anno || ""} onChange={v => upd("anno", v)} /></div>
+            <div style={{ flex: 1, minWidth: 0 }}><Field label="Split" value={cur.nA} onChange={v => upd("nA", v)} min={0} /></div>
+          </div>
+          <Toggle label="Ascensore" checked={cur.asc} onChange={v => upd("asc", v)} />
+        </Section>
+
+        {/* RISTRUTTURAZIONE */}
+        <Section title="Stima Ristrutturazione" icon="🔨" color="#e65100" collapsed={sec.reno} onToggle={() => tog("reno")} badge={costoRenoTot > 0 ? fmt(costoRenoTot) : null}>
+          <p style={{ fontSize: 11, color: "#888", margin: "0 0 8px" }}>Fascia qualità · <strong>{mq} mq calp.</strong></p>
+          <TierPick value={cur.rT} onChange={v => upd("rT", v)} />
+          {RENO.map(i => <ItemRow key={i.id} item={i} on={!!cur.rOn[i.id]} toggle={() => toggleR(i.id)} tier={cur.rT} qty={renoQty(i, mq, cur.nB, cur.nI, cur.nP, cur.nA)} accent="#e65100" />)}
+          {costoReno > 0 && <div style={{ background: "#fff3e0", borderRadius: 10, padding: 12, marginTop: 12 }}>
+            <CostRow label={`Lavori (${TIER[cur.rT]})`} value={costoReno} />
+            <CostRow label="Spese tecniche (8%)" value={spTecn} detail="Progetto, DL, CILA/SCIA" />
+            <CostRow label="TOTALE RISTRUTT." value={costoRenoTot} highlight />
+            <div style={{ marginTop: 6, fontSize: 10, color: "#666" }}>Detraz. 50%: {fmt(detrRenoA)}/anno x 10</div>
+          </div>}
+        </Section>
+
+        {/* ARREDO */}
+        <Section title="Stima Arredo" icon="🛋️" color="#6a1b9a" collapsed={sec.arredo} onToggle={() => tog("arredo")} badge={costoArredo > 0 ? fmt(costoArredo) : null}>
+          <TierPick value={cur.fT} onChange={v => upd("fT", v)} />
+          {FURN.map(i => <ItemRow key={i.id} item={i} on={!!cur.fOn[i.id]} toggle={() => toggleF(i.id)} tier={cur.fT} qty={furnQty(i, cur.nB)} accent="#6a1b9a" />)}
+          {costoArredo > 0 && <div style={{ background: "#f3e5f5", borderRadius: 10, padding: 12, marginTop: 12 }}>
+            <CostRow label={`TOTALE ARREDO (${TIER[cur.fT]})`} value={costoArredo} highlight />
+            {bmOk ? <div style={{ marginTop: 6, fontSize: 10, color: "#4a148c" }}>🎁 Bonus Mobili: 50% su max €5.000 = {fmt(detrMob)} ({fmt(detrMobA)}/anno x 10){costoArredo > 5000 && <span style={{ display: "block", color: "#e65100" }}>⚠️ Tetto: €5.000</span>}</div>
+            : costoReno === 0 ? <div style={{ marginTop: 6, fontSize: 10, color: "#e65100" }}>⚠️ Bonus Mobili: serve ristrutturazione</div> : null}
+          </div>}
+        </Section>
+
+        {/* RIEPILOGO SPESE */}
+        <Section title="Riepilogo Spese" icon="💰" color="#1565c0" collapsed={sec.costs} onToggle={() => tog("costs")}>
+          {prezzo === 0 ? <p style={{ fontSize: 12, color: "#999", textAlign: "center", padding: 16 }}>Inserisci il prezzo</p> : (<>
+            <div style={{ marginBottom: 10 }}>
+              <span style={{ fontSize: 10, fontWeight: 700, color: "#1565c0", textTransform: "uppercase" }}>Provvigione Agenzia</span>
+              <CostRow label="Netta (4%)" value={provvN} detail={`${fmt(prezzo)} x 4%`} />
+              <CostRow label="IVA (22%)" value={provvIVA} />
+              <CostRow label="Totale provvigione" value={provvT} highlight />
+              <div style={{ fontSize: 10, color: "#666", marginTop: 3 }}>Detraz. 19%: {fmt(detrAg)}</div>
+            </div>
+            <div style={{ marginBottom: 10 }}>
+              <span style={{ fontSize: 10, fontWeight: 700, color: "#1565c0", textTransform: "uppercase" }}>Imposte</span>
+              <CostRow label="Registro (2%)" value={impReg} detail={cur.rendita > 0 ? `Val.cat.: ${fmt(valCat)}` : "Sul prezzo"} />
+              <CostRow label="Catastale" value={impC} />
+              <CostRow label="Ipotecaria" value={impI} />
+              <CostRow label="Totale imposte" value={totImp} highlight />
+            </div>
+            <div style={{ marginBottom: 10 }}>
+              <span style={{ fontSize: 10, fontWeight: 700, color: "#1565c0", textTransform: "uppercase" }}>Altre Spese</span>
+              <CostRow label="Notaio" value={notaio} detail="Atto + mutuo" />
+              <CostRow label="Perizia mutuo" value={perizia} />
+              <CostRow label="Istruttoria" value={istrutt} />
+            </div>
+            <div style={{ background: "#e3f2fd", borderRadius: 10, padding: 12 }}>
+              <CostRow label="TOTALE SPESE ACQUISTO" value={totSpAcq} highlight />
+              <div style={{ fontSize: 11, color: "#555", marginTop: 3 }}>Incidenza: <strong>{((totSpAcq / prezzo) * 100).toFixed(1)}%</strong></div>
+            </div>
+          </>)}
+        </Section>
+
+        {/* RISULTATO */}
+        <Section title="Risultato Finale" icon="🎯" color="#c62828" collapsed={sec.result} onToggle={() => tog("result")}>
+          {prezzo === 0 ? <p style={{ fontSize: 12, color: "#999", textAlign: "center", padding: 16 }}>Inserisci i dati</p> : (<>
+            <div style={{ background: "#fafafa", borderRadius: 10, padding: 12, marginBottom: 12 }}>
+              <CostRow label="Prezzo immobile" value={prezzo} detail={cur.offerta > 0 && cur.prezzoRich > 0 ? `Offerta (-${((1 - cur.offerta / cur.prezzoRich) * 100).toFixed(1)}% su ${fmt(cur.prezzoRich)})` : null} />
+              <CostRow label="Spese acquisto" value={totSpAcq} />
+              {costoRenoTot > 0 && <CostRow label={`Ristrutturazione (${TIER[cur.rT]})`} value={costoRenoTot} />}
+              {costoArredo > 0 && <CostRow label={`Arredo (${TIER[cur.fT]})`} value={costoArredo} />}
+              <div style={{ height: 2, background: "#ddd", margin: "6px 0" }} />
+              <CostRow label="COSTO TOTALE" value={costoTot} highlight />
+            </div>
+            <div style={{ background: over ? "linear-gradient(135deg,#ffebee,#ffcdd2)" : "linear-gradient(135deg,#e8f5e9,#c8e6c9)", borderRadius: 12, padding: 16, textAlign: "center", marginBottom: 12, border: `2px solid ${over ? "#ef9a9a" : "#a5d6a7"}` }}>
+              <div style={{ fontSize: 32, marginBottom: 4 }}>{over ? "🚫" : "✅"}</div>
+              <div style={{ fontWeight: 800, fontSize: 17, color: over ? "#c62828" : "#2e7d32" }}>{over ? "FUORI BUDGET" : "NEL BUDGET"}</div>
+              <div style={{ fontSize: 13, color: over ? "#b71c1c" : "#1b5e20", fontWeight: 600 }}>{over ? `Ti mancano ${fmt(Math.abs(marg))}` : `Margine: ${fmt(marg)}`}</div>
+            </div>
+            <div style={{ background: "linear-gradient(135deg,#1b4332,#2d6a4f)", borderRadius: 12, padding: 16, textAlign: "center", color: "#fff" }}>
+              <div style={{ fontSize: 11, opacity: 0.8, marginBottom: 3 }}>OFFERTA MASSIMA SOSTENIBILE</div>
+              <div style={{ fontSize: 28, fontWeight: 800, fontFamily: "'DM Mono',monospace" }}>{fmt(Math.max(0, Math.floor(offMax / 1000) * 1000))}</div>
+              <div style={{ fontSize: 10, opacity: 0.7, marginTop: 3 }}>Con spese, ristrutturazione e arredo</div>
+            </div>
+            {detrTot > 0 && <div style={{ background: "#f1f8e9", borderRadius: 10, padding: 12, marginTop: 12 }}>
+              <span style={{ fontSize: 10, fontWeight: 700, color: "#558b2f", textTransform: "uppercase" }}>Detrazioni Fiscali</span>
+              {detrAg > 0 && <CostRow label="Agenzia (19%)" value={detrAg} deductible />}
+              {detrReno > 0 && <CostRow label="Ristrutt. (50%)" value={detrReno} detail={`${fmt(detrRenoA)}/anno x 10`} deductible />}
+              {detrMob > 0 && <CostRow label="Bonus Mobili" value={detrMob} detail={`${fmt(detrMobA)}/anno x 10`} deductible />}
+              <CostRow label="TOTALE DETRAZIONI" value={detrTot} highlight />
+              <div style={{ fontSize: 10, color: "#666", marginTop: 4 }}>Netto: <strong>{fmt(costoTot - detrTot)}</strong></div>
+            </div>}
+            {cur.mqC > 0 && <div style={{ background: "#fafafa", borderRadius: 10, padding: 12, marginTop: 12, textAlign: "center" }}>
+              <span style={{ fontSize: 10, fontWeight: 700, color: "#666", textTransform: "uppercase" }}>€/MQ</span>
+              <div style={{ fontSize: 20, fontWeight: 800, fontFamily: "'DM Mono',monospace", marginTop: 3 }}>{fmt(Math.round(prezzo / cur.mqC))}/mq <span style={{ fontSize: 10, color: "#999", fontWeight: 400, fontFamily: "'DM Sans'" }}>comm.</span></div>
+              {mq > 0 && <div style={{ fontSize: 15, fontWeight: 700, color: "#666", fontFamily: "'DM Mono',monospace", marginTop: 2 }}>{fmt(Math.round(prezzo / mq))}/mq <span style={{ fontSize: 10, color: "#999", fontWeight: 400, fontFamily: "'DM Sans'" }}>calp.</span></div>}
+            </div>}
+          </>)}
+        </Section>
+
+        {/* SAVE / NEW BUTTONS */}
+        {(cur.prezzoRich > 0 || cur.offerta > 0) && (
+          <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+            <button onClick={doSave}
+              style={{ flex: 1, padding: "14px", borderRadius: 12, border: "none", background: "linear-gradient(135deg,#1b4332,#2d6a4f)", color: "#fff", fontWeight: 800, fontSize: 14, cursor: "pointer", boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}>
+              💾 Salva
+            </button>
+            <button onClick={doNew}
+              style={{ padding: "14px 20px", borderRadius: 12, border: "2px solid #2d6a4f", background: "#fff", color: "#2d6a4f", fontWeight: 800, fontSize: 14, cursor: "pointer" }}>
+              + Nuova
+            </button>
+          </div>
+        )}
+
+        <div style={{ fontSize: 9, color: "#aaa", textAlign: "center", padding: "12px 0", lineHeight: 1.5 }}>
+          CasaCalc v2.0 · Costi Roma 2025 · I dati restano sul tuo dispositivo
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+<script>
+// Register Service Worker for offline + install
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>
