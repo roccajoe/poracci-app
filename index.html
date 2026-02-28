@@ -57,7 +57,19 @@ const Field = ({ label, value, onChange, suffix, type = "number", hint, min, ste
   <div style={{ marginBottom: 12, minWidth: 0 }}>
     <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#555", marginBottom: 3 }}>{label}</label>
     <div style={{ display: "flex", alignItems: "center", gap: 4, minWidth: 0 }}>
-      <input type={type} inputMode={type === "number" ? "decimal" : undefined} value={value} onChange={(e) => onChange(type === "number" ? parseFloat(e.target.value) || 0 : e.target.value)} min={min} step={step || 1} disabled={disabled}
+      <input type={type === "number" ? "text" : type} inputMode={type === "number" ? "decimal" : undefined}
+        value={type === "number" ? (value === 0 || value === "" ? "" : value) : value}
+        onChange={(e) => {
+          if (type === "number") {
+            const raw = e.target.value;
+            if (raw === "" || raw === "-") { onChange(0); return; }
+            const n = parseFloat(raw);
+            if (!isNaN(n)) onChange(n);
+          } else { onChange(e.target.value); }
+        }}
+        onFocus={(e) => { if (type === "number" && (e.target.value === "0" || e.target.value === "")) e.target.value = ""; e.target.style.borderColor = "#2d6a4f"; }}
+        onBlur={(e) => { e.target.style.borderColor = "#ddd"; }}
+        min={min} step={step || 1} disabled={disabled}
         style={{ width: "100%", minWidth: 0, boxSizing: "border-box", padding: "9px 10px", borderRadius: 8, border: "1px solid #ddd", fontFamily: type === "text" ? "'DM Sans',sans-serif" : "'DM Mono',monospace", fontSize: 16, fontWeight: 500, outline: "none", background: disabled ? "#eee" : "#fafafa" }} />
       {suffix && <span style={{ fontSize: 12, color: "#888", fontWeight: 500, flexShrink: 0 }}>{suffix}</span>}
     </div>
@@ -144,18 +156,19 @@ const InfoBubble = ({ children, color = "#2d6a4f" }) => {
 
 /* ═══════════════ DATA ═══════════════ */
 const RENO = [
-  { id: "elett", label: "Imp. Elettrico", icon: "⚡", type: "sqm", t: { eco: 45, med: 65, pre: 90 }, info: { eco: "BTicino Living base", med: "BTicino Matix/Vimar, quadro evoluto", pre: "Domotica, Axolute, smart" }, note: "Cavi, quadro, punti luce, certificazione" },
-  { id: "idra", label: "Imp. Idraulico", icon: "🔧", type: "sqm", t: { eco: 40, med: 55, pre: 75 }, info: { eco: "Multistrato base", med: "Multistrato qualità, collettori", pre: "PEX-a, addolcitore" }, note: "Tubazioni, allacci, scarichi, collaudo" },
-  { id: "pav", label: "Pavimenti", icon: "🏗", type: "sqm", t: { eco: 50, med: 80, pre: 130 }, info: { eco: "Gres porcellanato base + posa", med: "Gres rettificato + posa", pre: "Effetto marmo / parquet massello" }, note: "Rimozione, massetto, fornitura, posa, battiscopa" },
-  { id: "bagno", label: "Rifac. Bagno", icon: "🚿", type: "bath", t: { eco: 5000, med: 8000, pre: 12000 }, info: { eco: "Ideal Standard base, box std", med: "Sospesi, filo pavimento, Grohe", pre: "Duravit/Flaminia, Hansgrohe" }, note: "Demolizione, sanitari, rubinetteria, piastrelle" },
-  { id: "cuc_imp", label: "Imp. Cucina", icon: "🍳", type: "fix", t: { eco: 3000, med: 4000, pre: 5500 }, info: { eco: "Predisposizione base", med: "Completa con cappa, prese dedicate", pre: "Certificata, ventilaz. forzata" }, note: "Acqua, scarico, gas, prese elettriche" },
-  { id: "imb", label: "Imbiancatura", icon: "🎨", type: "sqm", t: { eco: 10, med: 15, pre: 25 }, info: { eco: "2 mani bianca", med: "Rasatura, pittura lavabile", pre: "Farrow&Ball, effetti decorativi" }, note: "Preparazione, stuccatura, tinteggiatura" },
-  { id: "inf", label: "Infissi", icon: "🪟", type: "inf", t: { eco: 700, med: 1200, pre: 1800 }, info: { eco: "PVC base doppio vetro", med: "PVC/alluminio taglio termico", pre: "Legno-alluminio, triplo vetro" }, note: "Rimozione, fornitura, controtelaio, posa" },
-  { id: "port", label: "Porte Interne", icon: "🚪", type: "por", t: { eco: 300, med: 500, pre: 800 }, info: { eco: "Tamburata laminato", med: "Laccata, maniglie cromate", pre: "Massella, maniglie design" }, note: "Porta, controtelaio, coprifili, maniglia" },
-  { id: "risc", label: "Riscaldamento", icon: "🌡", type: "sqm", t: { eco: 60, med: 80, pre: 110 }, info: { eco: "Caldaia base, radiatori alluminio", med: "Vaillant/Baxi, radiatori design", pre: "Premium, a pavimento, smart" }, note: "Caldaia, radiatori, tubazioni, termostato" },
-  { id: "cond", label: "Condizionamento", icon: "❄️", type: "ac", t: { eco: 1000, med: 1500, pre: 2200 }, info: { eco: "Hisense/Midea A+", med: "Daikin/Mitsubishi A++", pre: "Daikin Perfera wifi design" }, note: "Unità int+est, tubazioni, staffa, gas" },
-  { id: "mur", label: "Mod. Murature", icon: "🧱", type: "fix", t: { eco: 3000, med: 5000, pre: 8000 }, info: { eco: "Demolizione 1-2 tramezzi", med: "Redistribuzione ambienti", pre: "Complessa, archi, pareti attrezzate" }, note: "Demolizioni, smaltimento, nuove pareti" },
-  { id: "cont", label: "Controsoffitti", icon: "📐", type: "sqm", t: { eco: 30, med: 45, pre: 65 }, info: { eco: "Cartongesso singola lastra", med: "Doppia lastra, faretti", pre: "Sagomato, LED integrati" }, note: "Struttura, lastre, stuccatura, rasatura" },
+  { id: "elett", label: "Imp. Elettrico", icon: "⚡", type: "sqm", t: { eco: 45, med: 65, pre: 90 }, info: { eco: "BTicino Living base", med: "BTicino Matix/Vimar, quadro evoluto", pre: "Domotica, Axolute, smart" }, note: "Cavi, quadro, punti luce, certificazione · IVA 10%, materiali e manodopera inclusi" },
+  { id: "idra", label: "Imp. Idraulico", icon: "🔧", type: "sqm", t: { eco: 40, med: 55, pre: 75 }, info: { eco: "Multistrato base", med: "Multistrato qualità, collettori", pre: "PEX-a, addolcitore" }, note: "Tubazioni, allacci, scarichi, collaudo · IVA 10%, materiali e manodopera inclusi" },
+  { id: "pav", label: "Pavimenti", icon: "🏗", type: "sqm", t: { eco: 50, med: 80, pre: 130 }, info: { eco: "Gres porcellanato base + posa", med: "Gres rettificato + posa", pre: "Effetto marmo / parquet massello" }, note: "Rimozione, massetto, fornitura, posa, battiscopa · IVA 10%, materiali e manodopera inclusi" },
+  { id: "bagno", label: "Rifac. Bagno", icon: "🚿", type: "bath", t: { eco: 5000, med: 8000, pre: 12000 }, info: { eco: "Ideal Standard base, box std", med: "Sospesi, filo pavimento, Grohe", pre: "Duravit/Flaminia, Hansgrohe" }, note: "Demolizione, sanitari, rubinetteria, piastrelle · IVA 10%, materiali e manodopera inclusi" },
+  { id: "cuc_imp", label: "Imp. Cucina", icon: "🍳", type: "fix", t: { eco: 3000, med: 4000, pre: 5500 }, info: { eco: "Predisposizione base", med: "Completa con cappa, prese dedicate", pre: "Certificata, ventilaz. forzata" }, note: "Acqua, scarico, gas, prese elettriche · IVA 10%, materiali e manodopera inclusi" },
+  { id: "imb", label: "Imbiancatura", icon: "🎨", type: "sqm", t: { eco: 10, med: 15, pre: 25 }, info: { eco: "2 mani bianca", med: "Rasatura, pittura lavabile", pre: "Farrow&Ball, effetti decorativi" }, note: "Preparazione, stuccatura, tinteggiatura · IVA 10%, materiali e manodopera inclusi" },
+  { id: "inf", label: "Infissi", icon: "🪟", type: "inf", t: { eco: 700, med: 1200, pre: 1800 }, info: { eco: "PVC base doppio vetro", med: "PVC/alluminio taglio termico", pre: "Legno-alluminio, triplo vetro" }, note: "Rimozione, fornitura, controtelaio, posa · IVA 10%, materiali e manodopera inclusi" },
+  { id: "zanz", label: "Zanzariere", icon: "🪰", type: "inf", t: { eco: 80, med: 150, pre: 250 }, info: { eco: "A rullo laterale, fibra vetro", med: "A rullo verticale, plissettata", pre: "A scomparsa, Bettio/MV Line" }, note: "Fornitura, misura, installazione · IVA 10% inclusa. Qty = n° infissi" },
+  { id: "port", label: "Porte Interne", icon: "🚪", type: "por", t: { eco: 300, med: 500, pre: 800 }, info: { eco: "Tamburata laminato", med: "Laccata, maniglie cromate", pre: "Massella, maniglie design" }, note: "Porta, controtelaio, coprifili, maniglia · IVA 10%, materiali e manodopera inclusi" },
+  { id: "risc", label: "Riscaldamento", icon: "🌡", type: "sqm", t: { eco: 60, med: 80, pre: 110 }, info: { eco: "Caldaia base, radiatori alluminio", med: "Vaillant/Baxi, radiatori design", pre: "Premium, a pavimento, smart" }, note: "Caldaia, radiatori, tubazioni, termostato · IVA 10%, materiali e manodopera inclusi" },
+  { id: "cond", label: "Condizionamento", icon: "❄️", type: "ac", t: { eco: 1000, med: 1500, pre: 2200 }, info: { eco: "Hisense/Midea A+", med: "Daikin/Mitsubishi A++", pre: "Daikin Perfera wifi design" }, note: "Unità int+est, tubazioni, staffa, gas · IVA 10%, materiali e manodopera inclusi" },
+  { id: "mur", label: "Mod. Murature", icon: "🧱", type: "fix", t: { eco: 3000, med: 5000, pre: 8000 }, info: { eco: "Demolizione 1-2 tramezzi", med: "Redistribuzione ambienti", pre: "Complessa, archi, pareti attrezzate" }, note: "Demolizioni, smaltimento, nuove pareti · IVA 10%, materiali e manodopera inclusi" },
+  { id: "cont", label: "Controsoffitti", icon: "📐", type: "sqm", t: { eco: 30, med: 45, pre: 65 }, info: { eco: "Cartongesso singola lastra", med: "Doppia lastra, faretti", pre: "Sagomato, LED integrati" }, note: "Struttura, lastre, stuccatura, rasatura · IVA 10%, materiali e manodopera inclusi" },
 ];
 
 const FURN = [
@@ -223,7 +236,8 @@ const DiscountBadge = ({ prezzo, offerta }) => {
 const emptyEval = () => ({
   id: uid(), label: "", url: "", prezzoRich: 0, offerta: 0, rendita: 0,
   mqC: 0, mqP: 0, autoMq: true, nB: 1, nI: 5, nP: 4, nA: 2,
-  piano: "", asc: false, anno: 0, rT: "med", fT: "med", rOn: {}, fOn: {}, savedAt: null,
+  piano: "", asc: false, anno: 0, rT: "med", fT: "med", rOn: {}, fOn: {},
+  provvPct: 4, savedAt: null,
 });
 
 /* ═══════════════ MAIN APP ═══════════════ */
@@ -273,12 +287,13 @@ function App() {
   let costoArredo = 0;
   FURN.forEach(i => { if (cur.fOn[i.id]) costoArredo += i.t[cur.fT] * furnQty(i, cur.nB); });
 
-  const provvN = prezzo * 0.04, provvIVA = provvN * 0.22, provvT = provvN + provvIVA;
+  const provvRate = (cur.provvPct || 4) / 100;
+  const provvN = prezzo * provvRate, provvIVA = provvN * 0.22, provvT = provvN + provvIVA;
   const valCat = cur.rendita * 115.5;
   const impReg = cur.rendita > 0 ? Math.max(valCat * 0.02, 1000) : prezzo * 0.02;
   const impC = 50, impI = 50, totImp = impReg + impC + impI;
-  const notaio = prezzo <= 100000 ? 2000 : prezzo <= 200000 ? 2800 : prezzo <= 300000 ? 3500 : prezzo <= 500000 ? 4200 : 5000;
-  const perizia = 350, istrutt = 500;
+  const notaio = 5000;
+  const perizia = 350, istrutt = 2500;
   const totSpAcq = provvT + totImp + notaio + perizia + istrutt;
   const costoTot = prezzo + totSpAcq + costoRenoTot + costoArredo;
 
@@ -290,7 +305,8 @@ function App() {
 
   const budgNet = BUDGET - costoRenoTot - costoArredo;
   const spFix = notaio + perizia + istrutt + impC + impI;
-  const offMax = cur.rendita > 0 ? (budgNet - spFix - Math.max(cur.rendita * 115.5 * 0.02, 1000)) / (1 + 0.0488) : (budgNet - spFix) / (1 + 0.0488 + 0.02);
+  const provvTotRate = provvRate * 1.22; // netta + IVA 22%
+  const offMax = cur.rendita > 0 ? (budgNet - spFix - Math.max(cur.rendita * 115.5 * 0.02, 1000)) / (1 + provvTotRate) : (budgNet - spFix) / (1 + provvTotRate + 0.02);
   const over = costoTot > BUDGET, marg = BUDGET - costoTot;
 
   const toggleR = id => setCur(p => ({ ...p, rOn: { ...p.rOn, [id]: !p.rOn[id] } }));
@@ -306,7 +322,7 @@ function App() {
             <span style={{ fontSize: 26 }}>🏠</span>
             <h1 style={{ margin: 0, fontSize: 20, fontWeight: 800 }}>CasaCalc</h1>
           </div>
-          <p style={{ margin: 0, fontSize: 12, opacity: 0.8 }}>Prima casa · Roma · Privato · Agenzia 4%+IVA</p>
+          <p style={{ margin: 0, fontSize: 12, opacity: 0.8 }}>Prima casa · Roma · Privato · Agenzia {cur.provvPct || 4}%+IVA</p>
         </div>
       </div>
 
@@ -394,11 +410,14 @@ function App() {
             <div style={{ flex: 1, minWidth: 0 }}><Field label="Split" value={cur.nA} onChange={v => upd("nA", v)} min={0} /></div>
           </div>
           <Toggle label="Ascensore" checked={cur.asc} onChange={v => upd("asc", v)} />
+          <div style={{ marginTop: 4, paddingTop: 10, borderTop: "1px solid #eee" }}>
+            <Field label="Commissione agenzia (%)" value={cur.provvPct || 4} onChange={v => upd("provvPct", v)} suffix="%" step={0.5} hint="Solo acquirente. 0 = privato senza agenzia" />
+          </div>
         </Section>
 
         {/* RISTRUTTURAZIONE */}
         <Section title="Stima Ristrutturazione" icon="🔨" color="#e65100" collapsed={sec.reno} onToggle={() => tog("reno")} badge={costoRenoTot > 0 ? fmt(costoRenoTot) : null}>
-          <p style={{ fontSize: 11, color: "#888", margin: "0 0 8px" }}>Fascia qualità · <strong>{mq} mq calp.</strong></p>
+          <p style={{ fontSize: 11, color: "#888", margin: "0 0 8px" }}>Fascia qualità · <strong>{mq} mq calp.</strong> · <span style={{ color: "#e65100" }}>Prezzi IVA, materiali e manodopera inclusi</span></p>
           <TierPick value={cur.rT} onChange={v => upd("rT", v)} />
           {RENO.map(i => <ItemRow key={i.id} item={i} on={!!cur.rOn[i.id]} toggle={() => toggleR(i.id)} tier={cur.rT} qty={renoQty(i, mq, cur.nB, cur.nI, cur.nP, cur.nA)} accent="#e65100" />)}
           {costoReno > 0 && <div style={{ background: "#fff3e0", borderRadius: 10, padding: 12, marginTop: 12 }}>
@@ -425,7 +444,7 @@ function App() {
           {prezzo === 0 ? <p style={{ fontSize: 12, color: "#999", textAlign: "center", padding: 16 }}>Inserisci il prezzo</p> : (<>
             <div style={{ marginBottom: 10 }}>
               <span style={{ fontSize: 10, fontWeight: 700, color: "#1565c0", textTransform: "uppercase" }}>Provvigione Agenzia</span>
-              <CostRow label="Netta (4%)" value={provvN} detail={`${fmt(prezzo)} x 4%`} />
+              <CostRow label={`Netta (${cur.provvPct || 4}%)`} value={provvN} detail={`${fmt(prezzo)} x ${cur.provvPct || 4}%`} />
               <CostRow label="IVA (22%)" value={provvIVA} />
               <CostRow label="Totale provvigione" value={provvT} highlight />
               <div style={{ fontSize: 10, color: "#666", marginTop: 3 }}>Detraz. 19%: {fmt(detrAg)}</div>
@@ -439,9 +458,9 @@ function App() {
             </div>
             <div style={{ marginBottom: 10 }}>
               <span style={{ fontSize: 10, fontWeight: 700, color: "#1565c0", textTransform: "uppercase" }}>Altre Spese</span>
-              <CostRow label="Notaio" value={notaio} detail="Atto + mutuo" />
+              <CostRow label="Notaio" value={notaio} detail="Atto compravendita + atto mutuo" />
               <CostRow label="Perizia mutuo" value={perizia} />
-              <CostRow label="Istruttoria" value={istrutt} />
+              <CostRow label="Istruttoria banca" value={istrutt} />
             </div>
             <div style={{ background: "#e3f2fd", borderRadius: 10, padding: 12 }}>
               <CostRow label="TOTALE SPESE ACQUISTO" value={totSpAcq} highlight />
@@ -502,7 +521,7 @@ function App() {
         )}
 
         <div style={{ fontSize: 9, color: "#aaa", textAlign: "center", padding: "12px 0", lineHeight: 1.5 }}>
-          CasaCalc v2.0 · Costi Roma 2025 · I dati restano sul tuo dispositivo
+          CasaCalc v2.1 · Costi Roma 2025 · I dati restano sul tuo dispositivo
         </div>
       </div>
     </div>
