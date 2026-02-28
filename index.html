@@ -287,7 +287,7 @@ function App() {
   let costoArredo = 0;
   FURN.forEach(i => { if (cur.fOn[i.id]) costoArredo += i.t[cur.fT] * furnQty(i, cur.nB); });
 
-  const provvRate = (cur.provvPct || 4) / 100;
+  const provvRate = (cur.provvPct != null ? cur.provvPct : 4) / 100;
   const provvN = prezzo * provvRate, provvIVA = provvN * 0.22, provvT = provvN + provvIVA;
   const valCat = cur.rendita * 115.5;
   const impReg = cur.rendita > 0 ? Math.max(valCat * 0.02, 1000) : prezzo * 0.02;
@@ -322,7 +322,7 @@ function App() {
             <span style={{ fontSize: 26 }}>🏠</span>
             <h1 style={{ margin: 0, fontSize: 20, fontWeight: 800 }}>CasaCalc</h1>
           </div>
-          <p style={{ margin: 0, fontSize: 12, opacity: 0.8 }}>Prima casa · Roma · Privato · Agenzia {cur.provvPct || 4}%+IVA</p>
+          <p style={{ margin: 0, fontSize: 12, opacity: 0.8 }}>Prima casa · Roma · Privato · Agenzia {cur.provvPct != null ? cur.provvPct : 4}%+IVA</p>
         </div>
       </div>
 
@@ -411,7 +411,7 @@ function App() {
           </div>
           <Toggle label="Ascensore" checked={cur.asc} onChange={v => upd("asc", v)} />
           <div style={{ marginTop: 4, paddingTop: 10, borderTop: "1px solid #eee" }}>
-            <Field label="Commissione agenzia (%)" value={cur.provvPct || 4} onChange={v => upd("provvPct", v)} suffix="%" step={0.5} hint="Solo acquirente. 0 = privato senza agenzia" />
+            <Field label="Commissione agenzia (%)" value={cur.provvPct} onChange={v => upd("provvPct", v)} suffix="%" step={0.5} hint="Solo acquirente. 0 = privato senza agenzia" />
           </div>
         </Section>
 
@@ -444,7 +444,7 @@ function App() {
           {prezzo === 0 ? <p style={{ fontSize: 12, color: "#999", textAlign: "center", padding: 16 }}>Inserisci il prezzo</p> : (<>
             <div style={{ marginBottom: 10 }}>
               <span style={{ fontSize: 10, fontWeight: 700, color: "#1565c0", textTransform: "uppercase" }}>Provvigione Agenzia</span>
-              <CostRow label={`Netta (${cur.provvPct || 4}%)`} value={provvN} detail={`${fmt(prezzo)} x ${cur.provvPct || 4}%`} />
+              <CostRow label={`Netta (${cur.provvPct != null ? cur.provvPct : 4}%)`} value={provvN} detail={`${fmt(prezzo)} x ${cur.provvPct != null ? cur.provvPct : 4}%`} />
               <CostRow label="IVA (22%)" value={provvIVA} />
               <CostRow label="Totale provvigione" value={provvT} highlight />
               <div style={{ fontSize: 10, color: "#666", marginTop: 3 }}>Detraz. 19%: {fmt(detrAg)}</div>
