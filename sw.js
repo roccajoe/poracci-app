@@ -1,4 +1,4 @@
-const CACHE = 'casacalc-v2.3';
+const CACHE = 'casacalc-v3.0';
 const ASSETS = [
   '/',
   '/index.html',

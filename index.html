@@ -183,64 +183,65 @@ const renoQty = (it, mq, nB, nI, nP, nA) => ({ sqm: mq, fix: 1, bath: nB, inf: n
 const furnQty = (it, nB) => it.type === "bath" ? nB : 1;
 
 /* ═══════════════ SHOPPING LIST ═══════════════ */
-const SHOP = [
+const SHOP_DEFAULTS = [
   { cat: "frigo", icon: "❄️", label: "Frigorifero", items: [
-    { m: "Samsung RB53DG706AB1EF", b: "Samsung", p: 800, c: "A", w: "Primo classe A, AI Energy, 538L" },
-    { m: "Bosch KGN49VXDT Serie 4", b: "Bosch", p: 650, c: "C", w: "VitaFresh 0°C, No Frost, 440L" },
-    { m: "LG GBV3100DEP", b: "LG", p: 500, c: "D", w: "Linear Cooling, Door Cooling+, WiFi" },
-    { m: "Hisense RB440N4BCE", b: "Hisense", p: 380, c: "E", w: "Miglior budget, No Frost, 336L" },
-    { m: "Siemens KG49NAICT iQ500", b: "Siemens", p: 750, c: "C", w: "N.1 Altroconsumo, hyperFresh" },
+    { m: "Samsung RB53DG706AB1EF", p: 800, w: "Primo classe A, AI Energy, 538L" },
+    { m: "Bosch KGN49VXDT Serie 4", p: 650, w: "VitaFresh 0°C, No Frost, 440L" },
+    { m: "LG GBV3100DEP", p: 500, w: "Linear Cooling, Door Cooling+, WiFi" },
+    { m: "Hisense RB440N4BCE", p: 380, w: "Miglior budget, No Frost, 336L" },
+    { m: "Siemens KG49NAICT iQ500", p: 750, w: "N.1 Altroconsumo, hyperFresh" },
   ]},
   { cat: "lavastoviglie", icon: "🍽️", label: "Lavastoviglie", items: [
-    { m: "Bosch SMV6YCX02E Serie 6", b: "Bosch", p: 650, c: "B", w: "PerfectDry Zeolite, Home Connect" },
-    { m: "Siemens SN65ZX49CE iQ500", b: "Siemens", p: 1060, c: "A", w: "Zeolite, varioSpeed, GlassZone" },
-    { m: "Bosch SMS4EVI14E Serie 4", b: "Bosch", p: 500, c: "C", w: "Miglior Q/P Bosch, ExtraDry, 14 cop." },
-    { m: "Miele G7160 SCVi", b: "Miele", p: 1350, c: "B", w: "AutoDos PowerDisk, 3D MultiFlex" },
-    { m: "Electrolux EEG69410L", b: "Electrolux", p: 550, c: "C", w: "AirDry auto, SatelliteClean, 15 cop." },
+    { m: "Bosch SMV6YCX02E Serie 6", p: 650, w: "PerfectDry Zeolite, Home Connect" },
+    { m: "Siemens SN65ZX49CE iQ500", p: 1060, w: "Zeolite, varioSpeed, GlassZone" },
+    { m: "Bosch SMS4EVI14E Serie 4", p: 500, w: "Miglior Q/P Bosch, ExtraDry, 14 cop." },
+    { m: "Miele G7160 SCVi", p: 1350, w: "AutoDos PowerDisk, 3D MultiFlex" },
+    { m: "Electrolux EEG69410L", p: 550, w: "AirDry auto, SatelliteClean, 15 cop." },
   ]},
   { cat: "forno", icon: "🔥", label: "Forno incasso", items: [
-    { m: "Bosch HBG578BB3 Serie 6", b: "Bosch", p: 550, c: "A", w: "Pirolisi, 71L, Home Connect, sonda" },
-    { m: "Samsung NV7B5760WBK", b: "Samsung", p: 700, c: "A+", w: "Dual Cook, vapore, Air Fry, 76L" },
-    { m: "Electrolux EOD6P77WZ", b: "Electrolux", p: 500, c: "A+", w: "SteamBake, pirolisi, 72L, sonda" },
-    { m: "Smeg SF6390XE", b: "Smeg", p: 450, c: "A", w: "Termoventilato, 70L, design elegante" },
-    { m: "Whirlpool W7 OM5 4S P", b: "Whirlpool", p: 480, c: "A+", w: "6° Senso, vapore, Air Fry, 73L" },
+    { m: "Bosch HBG578BB3 Serie 6", p: 550, w: "Pirolisi, 71L, Home Connect, sonda" },
+    { m: "Samsung NV7B5760WBK", p: 700, w: "Dual Cook, vapore, Air Fry, 76L" },
+    { m: "Electrolux EOD6P77WZ", p: 500, w: "SteamBake, pirolisi, 72L, sonda" },
+    { m: "Smeg SF6390XE", p: 450, w: "Termoventilato, 70L, design elegante" },
+    { m: "Whirlpool W7 OM5 4S P", p: 480, w: "6° Senso, vapore, Air Fry, 73L" },
   ]},
   { cat: "piano", icon: "🍳", label: "Piano induzione", items: [
-    { m: "Bosch PXX675DC1E Serie 8", b: "Bosch", p: 650, c: "-", w: "FlexInduction, PerfectFry, conn. cappa" },
-    { m: "Electrolux EIS8648 Serie 800", b: "Electrolux", p: 550, c: "-", w: "Bridge, SenseBoil, Hob2Hood" },
-    { m: "Samsung NZ64B5045GK", b: "Samsung", p: 500, c: "-", w: "Dual Flex, Boost 3000W, SmartThings" },
-    { m: "AEG IKE64471FB", b: "AEG", p: 600, c: "-", w: "Bridge auto, Direktouch, PowerBoost" },
-    { m: "Hisense HI6421BSC", b: "Hisense", p: 280, c: "-", w: "Miglior budget, 4 zone, boost, timer" },
+    { m: "Bosch PXX675DC1E Serie 8", p: 650, w: "FlexInduction, PerfectFry, conn. cappa" },
+    { m: "Electrolux EIS8648 Serie 800", p: 550, w: "Bridge, SenseBoil, Hob2Hood" },
+    { m: "Samsung NZ64B5045GK", p: 500, w: "Dual Flex, Boost 3000W, SmartThings" },
+    { m: "AEG IKE64471FB", p: 600, w: "Bridge auto, Direktouch, PowerBoost" },
+    { m: "Hisense HI6421BSC", p: 280, w: "Miglior budget, 4 zone, boost, timer" },
   ]},
   { cat: "cappa", icon: "🌬️", label: "Cappa", items: [
-    { m: "Elica NikolaTesla Fit", b: "Elica", p: 800, c: "A", w: "Aspirazione nel piano, Compasso d'Oro" },
-    { m: "Faber Inca Smart HC 52", b: "Faber", p: 250, c: "A", w: "Incasso totale, silenziosa, ottimo Q/P" },
-    { m: "Bosch DWB67CM50 Serie 6", b: "Bosch", p: 350, c: "A", w: "A parete 60cm, EcoSilence" },
-    { m: "Electrolux LFP329X", b: "Electrolux", p: 200, c: "B", w: "Sottopensile 90cm, Hob2Hood, economica" },
-    { m: "Franke FMY 907 BI BK", b: "Franke", p: 600, c: "A+", w: "Perimetrale, vetro nero, design" },
+    { m: "Elica NikolaTesla Fit", p: 800, w: "Aspirazione nel piano, Compasso d'Oro" },
+    { m: "Faber Inca Smart HC 52", p: 250, w: "Incasso totale, silenziosa, ottimo Q/P" },
+    { m: "Bosch DWB67CM50 Serie 6", p: 350, w: "A parete 60cm, EcoSilence" },
+    { m: "Electrolux LFP329X", p: 200, w: "Sottopensile 90cm, Hob2Hood, economica" },
+    { m: "Franke FMY 907 BI BK", p: 600, w: "Perimetrale, vetro nero, design" },
   ]},
   { cat: "lav_slim", icon: "🧺", label: "Lavatrice Slim", items: [
-    { m: "Hisense WFQE7012EVM 45cm", b: "Hisense", p: 380, c: "A", w: "45cm, 7kg, inverter, vapore, silenziosa" },
-    { m: "Midea MF10EW70B 45cm", b: "Midea", p: 350, c: "A", w: "45cm, 7kg, motore BLDC, Steam Care, -40% consumi" },
-    { m: "Beko BMWSU4721A 45cm", b: "Beko", p: 400, c: "A", w: "45cm, 7kg, EnergySpin -35%, AutoClean, 15 progr." },
-    { m: "Hoover H3WP4474TAM6 44cm", b: "Hoover", p: 370, c: "A", w: "44cm, 7kg, WiFi, vapore, 16 programmi" },
-    { m: "Samsung WW70K5210XW 46cm", b: "Samsung", p: 450, c: "A", w: "46cm, 7kg, AddWash, Smart Control, Digital Inverter" },
+    { m: "Hisense WFQE7012EVM 45cm", p: 380, w: "45cm, 7kg, inverter, vapore, silenziosa" },
+    { m: "Midea MF10EW70B 45cm", p: 350, w: "45cm, 7kg, BLDC, Steam Care, -40% consumi" },
+    { m: "Beko BMWSU4721A 45cm", p: 400, w: "45cm, 7kg, EnergySpin, AutoClean" },
+    { m: "Hoover H3WP4474TAM6 44cm", p: 370, w: "44cm, 7kg, WiFi, vapore, 16 programmi" },
+    { m: "Samsung WW70K5210XW 46cm", p: 450, w: "46cm, 7kg, AddWash, Smart Control" },
   ]},
   { cat: "asc_slim", icon: "💨", label: "Asciugatrice Slim", items: [
-    { m: "Candy CSO4H7A1DE-S 46.5cm", b: "Candy", p: 420, c: "A+", w: "46.5cm, 7kg, WiFi+BT, Kilo Detector, Woolmark" },
-    { m: "Beko DRXS722W 46cm", b: "Beko", p: 380, c: "A+", w: "46cm, 7kg, EcoGentle, 15 programmi, illuminaz." },
-    { m: "Hoover ND4 H7A2TCBEX 50cm", b: "Hoover", p: 450, c: "A++", w: "50cm, 7kg, WiFi+BT, Active Dry Sensor" },
-    { m: "Candy RO4H7A2TCEX-S 50cm", b: "Candy", p: 400, c: "A++", w: "50cm, 7kg, app hOn, 7 cicli rapidi" },
-    { m: "Beko DRXS712W 46cm", b: "Beko", p: 350, c: "A++", w: "46cm, 7kg, pompa calore, EcoGentle, budget" },
+    { m: "Candy CSO4H7A1DE-S 46.5cm", p: 420, w: "46.5cm, 7kg, WiFi+BT, Kilo Detector" },
+    { m: "Beko DRXS722W 46cm", p: 380, w: "46cm, 7kg, EcoGentle, 15 programmi" },
+    { m: "Hoover ND4 H7A2TCBEX 50cm", p: 450, w: "50cm, 7kg, WiFi+BT, Active Dry Sensor" },
+    { m: "Candy RO4H7A2TCEX-S 50cm", p: 400, w: "50cm, 7kg, app hOn, 7 cicli rapidi" },
+    { m: "Beko DRXS712W 46cm", p: 350, w: "46cm, 7kg, pompa calore, EcoGentle" },
   ]},
   { cat: "clima_dual", icon: "❄️", label: "Clima Dual Split", items: [
-    { m: "Daikin 2MXM40M + 2x Perfera", b: "Daikin", p: 2200, c: "A+++", w: "9+9k BTU, SEER top, Flash Streamer, WiFi, R32" },
-    { m: "Mitsubishi MXZ-2F42VF + 2x AP", b: "Mitsubishi", p: 2000, c: "A+++", w: "9+9k BTU, SEER top, Plasma Quad, Night Mode" },
-    { m: "Samsung AJ040 + 2x WindFree", b: "Samsung", p: 1400, c: "A++", w: "9+9k BTU, WindFree 21k fori, AI Cooling, WiFi" },
-    { m: "LG MU2R15 + 2x Libero Smart", b: "LG", p: 1200, c: "A++", w: "9+9k BTU, Dual Inverter, UV Nano, ThinQ WiFi" },
-    { m: "Hisense 2AMW42U4RRA dual", b: "Hisense", p: 900, c: "A++", w: "9+9k BTU, budget, WiFi, Smart Air, R32" },
+    { m: "Daikin 2MXM40M + 2x Perfera", p: 2200, w: "9+9k BTU, SEER top, Flash Streamer, R32" },
+    { m: "Mitsubishi MXZ-2F42VF + 2x AP", p: 2000, w: "9+9k BTU, Plasma Quad, Night Mode" },
+    { m: "Samsung AJ040 + 2x WindFree", p: 1400, w: "9+9k BTU, WindFree, AI Cooling, WiFi" },
+    { m: "LG MU2R15 + 2x Libero Smart", p: 1200, w: "9+9k BTU, Dual Inverter, UV Nano" },
+    { m: "Hisense 2AMW42U4RRA dual", p: 900, w: "9+9k BTU, budget, WiFi, Smart Air" },
   ]},
 ];
+const ICONS = ["🛒","🛋️","💡","🪑","🚿","🧹","🖼️","🛏️","📺","🔧","🏠","🪞","🧰","🫧","🔌","🍽️","❄️","🔥","🧺","💨","🌬️","🍳","📐","🧱"];
 
 const ItemRow = ({ item, on, toggle, tier, qty, accent }) => {
   const cost = item.t[tier] * qty;
@@ -292,6 +293,51 @@ const DiscountBadge = ({ prezzo, offerta }) => {
   );
 };
 
+/* ═══════════════ ADD FORMS ═══════════════ */
+const AddItemForm = ({ onAdd, onCancel }) => {
+  const [m, setM] = useState("");
+  const [p, setP] = useState("");
+  return (
+    <div style={{ background: "#f5f9ff", borderRadius: 8, padding: 10, marginTop: 6, border: "1px solid #90caf9" }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: "#1565c0", marginBottom: 6 }}>Aggiungi prodotto</div>
+      <input type="text" placeholder="Nome prodotto" value={m} onChange={e => setM(e.target.value)}
+        style={{ width: "100%", boxSizing: "border-box", padding: "8px", borderRadius: 6, border: "1px solid #ddd", fontSize: 14, marginBottom: 6, fontFamily: "'DM Sans',sans-serif" }} />
+      <div style={{ display: "flex", gap: 6 }}>
+        <input type="text" inputMode="decimal" placeholder="Prezzo €" value={p} onChange={e => setP(e.target.value)}
+          style={{ flex: 1, padding: "8px", borderRadius: 6, border: "1px solid #ddd", fontSize: 14, fontFamily: "'DM Mono',monospace" }} />
+        <button onClick={() => { if (m && p) onAdd(m, p); }} disabled={!m || !p}
+          style={{ padding: "8px 16px", borderRadius: 6, border: "none", background: m && p ? "#1565c0" : "#ccc", color: "#fff", fontWeight: 700, fontSize: 12, cursor: m && p ? "pointer" : "default" }}>Aggiungi</button>
+        <button onClick={onCancel}
+          style={{ padding: "8px 12px", borderRadius: 6, border: "1px solid #ccc", background: "#fff", color: "#666", fontSize: 12, cursor: "pointer" }}>✕</button>
+      </div>
+    </div>
+  );
+};
+
+const AddCatForm = ({ onAdd, onCancel }) => {
+  const [label, setLabel] = useState("");
+  const [icon, setIcon] = useState("🛒");
+  return (
+    <div style={{ background: "#f5f9ff", borderRadius: 10, padding: 12, marginTop: 6, border: "1px solid #90caf9" }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: "#1565c0", marginBottom: 8 }}>Nuova categoria</div>
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
+        {ICONS.map(ic => (
+          <div key={ic} onClick={() => setIcon(ic)}
+            style={{ width: 32, height: 32, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, cursor: "pointer", background: icon === ic ? "#e3f2fd" : "transparent", border: icon === ic ? "2px solid #1565c0" : "2px solid transparent" }}>{ic}</div>
+        ))}
+      </div>
+      <div style={{ display: "flex", gap: 6 }}>
+        <input type="text" placeholder="Nome categoria" value={label} onChange={e => setLabel(e.target.value)}
+          style={{ flex: 1, padding: "8px", borderRadius: 6, border: "1px solid #ddd", fontSize: 14, fontFamily: "'DM Sans',sans-serif" }} />
+        <button onClick={() => { if (label) onAdd(label, icon); }} disabled={!label}
+          style={{ padding: "8px 16px", borderRadius: 6, border: "none", background: label ? "#1565c0" : "#ccc", color: "#fff", fontWeight: 700, fontSize: 12, cursor: label ? "pointer" : "default" }}>Crea</button>
+        <button onClick={onCancel}
+          style={{ padding: "8px 12px", borderRadius: 6, border: "1px solid #ccc", background: "#fff", color: "#666", fontSize: 12, cursor: "pointer" }}>✕</button>
+      </div>
+    </div>
+  );
+};
+
 /* ═══════════════ EMPTY EVAL ═══════════════ */
 const emptyEval = () => ({
   id: uid(), label: "", url: "", prezzoRich: 0, offerta: 0, rendita: 0,
@@ -311,6 +357,9 @@ function App() {
 
   const [saved, setSaved] = useState(() => LS.get('saved', []));
   const [cur, setCur] = useState(() => LS.get('current', emptyEval()));
+  const [shopList, setShopList] = useState(() => LS.get('shopList', SHOP_DEFAULTS));
+  const [addCatOpen, setAddCatOpen] = useState(false);
+  const [addItemCat, setAddItemCat] = useState(null);
   const upd = (k, v) => setCur(p => ({ ...p, [k]: v }));
 
   /* Persist to localStorage */
@@ -318,8 +367,28 @@ function App() {
   useEffect(() => { LS.set('liq', liq); }, [liq]);
   useEffect(() => { LS.set('saved', saved); }, [saved]);
   useEffect(() => { LS.set('current', cur); }, [cur]);
+  useEffect(() => { LS.set('shopList', shopList); }, [shopList]);
 
   useEffect(() => { if (cur.autoMq && cur.mqC > 0) upd("mqP", Math.round(cur.mqC * 0.82)); }, [cur.mqC, cur.autoMq]);
+
+  /* Shop list management */
+  const addShopCat = (label, icon) => {
+    const cat = "custom_" + uid();
+    setShopList(p => [...p, { cat, icon, label, items: [] }]);
+    setAddCatOpen(false);
+  };
+  const delShopCat = (cat) => {
+    setShopList(p => p.filter(c => c.cat !== cat));
+    setCur(p => { const s = { ...(p.shopSel || {}) }; delete s[cat]; return { ...p, shopSel: s }; });
+  };
+  const addShopItem = (cat, m, p) => {
+    setShopList(prev => prev.map(c => c.cat === cat ? { ...c, items: [...c.items, { m, p: Number(p), w: "" }] } : c));
+    setAddItemCat(null);
+  };
+  const delShopItem = (cat, idx) => {
+    setShopList(prev => prev.map(c => c.cat === cat ? { ...c, items: c.items.filter((_, i) => i !== idx) } : c));
+    setCur(p => { const sel = ((p.shopSel || {})[cat] || []).filter(i => i !== idx).map(i => i > idx ? i - 1 : i); return { ...p, shopSel: { ...(p.shopSel || {}), [cat]: sel } }; });
+  };
 
   /* Save */
   const doSave = () => {
@@ -349,11 +418,14 @@ function App() {
 
   let costoShop = 0;
   const shopSel = cur.shopSel || {};
-  SHOP.forEach(cat => {
+  shopList.forEach(cat => {
     const sel = shopSel[cat.cat] || [];
     if (sel.length > 0) {
-      const avg = sel.reduce((s, idx) => s + cat.items[idx].p, 0) / sel.length;
-      costoShop += Math.round(avg);
+      const validSel = sel.filter(idx => idx < cat.items.length);
+      if (validSel.length > 0) {
+        const avg = validSel.reduce((s, idx) => s + cat.items[idx].p, 0) / validSel.length;
+        costoShop += Math.round(avg);
+      }
     }
   });
   const costoArredoTot = costoArredo + costoShop;
@@ -515,19 +587,26 @@ function App() {
           </div>}
         </Section>
 
-        {/* LISTA SPESA ELETTRODOMESTICI */}
+        {/* LISTA SPESA INTERATTIVA */}
         <Section title="Lista Spesa" icon="🛒" color="#0d47a1" collapsed={sec.shop} onToggle={() => tog("shop")} badge={costoShop > 0 ? fmt(costoShop) : null}>
-          <p style={{ fontSize: 11, color: "#888", margin: "0 0 10px" }}>Seleziona i prodotti preferiti · Tocca il nome per cercare il miglior prezzo online</p>
-          {SHOP.map(cat => {
+          <p style={{ fontSize: 11, color: "#888", margin: "0 0 10px" }}>Tocca il nome per cercare il prezzo · Seleziona i prodotti · Aggiungi categorie e prodotti</p>
+          {shopList.map(cat => {
             const sel = (cur.shopSel || {})[cat.cat] || [];
-            const catCost = sel.length > 0 ? Math.round(sel.reduce((s, idx) => s + cat.items[idx].p, 0) / sel.length) : 0;
+            const validSel = sel.filter(idx => idx < cat.items.length);
+            const catCost = validSel.length > 0 ? Math.round(validSel.reduce((s, idx) => s + cat.items[idx].p, 0) / validSel.length) : 0;
             return (
-              <div key={cat.cat} style={{ marginBottom: 14 }}>
+              <div key={cat.cat} style={{ marginBottom: 14, borderBottom: "1px solid #e8e8e8", paddingBottom: 10 }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
                   <span style={{ fontSize: 13, fontWeight: 700, color: "#0d47a1" }}>{cat.icon} {cat.label}</span>
-                  {catCost > 0 && <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, fontWeight: 700, color: "#0d47a1", background: "#e3f2fd", padding: "2px 8px", borderRadius: 6 }}>
-                    {sel.length > 1 ? `media ` : ""}{fmt(catCost)}
-                  </span>}
+                  <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                    {catCost > 0 && <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, fontWeight: 700, color: "#0d47a1", background: "#e3f2fd", padding: "2px 8px", borderRadius: 6 }}>
+                      {validSel.length > 1 ? "media " : ""}{fmt(catCost)}
+                    </span>}
+                    <button onClick={() => setAddItemCat(addItemCat === cat.cat ? null : cat.cat)}
+                      style={{ width: 24, height: 24, borderRadius: 12, border: "1px solid #90caf9", background: addItemCat === cat.cat ? "#1565c0" : "#e3f2fd", color: addItemCat === cat.cat ? "#fff" : "#1565c0", fontSize: 16, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1 }}>+</button>
+                    {cat.cat.startsWith("custom_") && <button onClick={() => { if(confirm("Eliminare " + cat.label + "?")) delShopCat(cat.cat); }}
+                      style={{ width: 24, height: 24, borderRadius: 12, border: "none", background: "#ffebee", color: "#c62828", fontSize: 12, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>}
+                  </div>
                 </div>
                 {cat.items.map((it, idx) => {
                   const on = sel.includes(idx);
@@ -541,22 +620,30 @@ function App() {
                           style={{ fontSize: 12, fontWeight: 600, color: "#1565c0", cursor: "pointer", textDecoration: "underline", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                           {it.m}
                         </div>
-                        <div style={{ fontSize: 10, color: "#888" }}>{it.w}</div>
+                        {it.w && <div style={{ fontSize: 10, color: "#888" }}>{it.w}</div>}
                       </div>
-                      <div style={{ textAlign: "right", flexShrink: 0 }}>
-                        <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 12, fontWeight: 700, color: on ? "#1565c0" : "#999" }}>~{fmt(it.p)}</div>
-                        <div style={{ fontSize: 9, color: "#aaa" }}>{it.c}</div>
-                      </div>
+                      <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 12, fontWeight: 700, color: on ? "#1565c0" : "#999", flexShrink: 0 }}>~{fmt(it.p)}</span>
+                      <button onClick={(e) => { e.stopPropagation(); delShopItem(cat.cat, idx); }}
+                        style={{ width: 20, height: 20, borderRadius: 10, border: "none", background: "transparent", color: "#bbb", fontSize: 11, cursor: "pointer", flexShrink: 0, padding: 0 }}>✕</button>
                     </div>
                   );
                 })}
+                {addItemCat === cat.cat && <AddItemForm onAdd={(m, p) => addShopItem(cat.cat, m, p)} onCancel={() => setAddItemCat(null)} />}
+                {cat.items.length === 0 && addItemCat !== cat.cat && <div style={{ fontSize: 11, color: "#bbb", textAlign: "center", padding: 8 }}>Nessun prodotto — tocca + per aggiungere</div>}
               </div>
             );
           })}
-          {costoShop > 0 && <div style={{ background: "#e3f2fd", borderRadius: 10, padding: 12, marginTop: 8 }}>
-            <CostRow label="TOTALE ELETTRODOMESTICI" value={costoShop} highlight />
-            {Object.entries(cur.shopSel || {}).filter(([,v]) => v.length > 1).length > 0 &&
-              <div style={{ fontSize: 10, color: "#666", marginTop: 4 }}>💡 Categorie con più selezioni: viene usata la media dei prezzi</div>}
+          {/* ADD CATEGORY */}
+          {!addCatOpen ? (
+            <button onClick={() => setAddCatOpen(true)}
+              style={{ width: "100%", padding: "12px", borderRadius: 10, border: "2px dashed #90caf9", background: "transparent", color: "#1565c0", fontWeight: 700, fontSize: 13, cursor: "pointer", marginTop: 6 }}>
+              + Aggiungi categoria
+            </button>
+          ) : (
+            <AddCatForm onAdd={addShopCat} onCancel={() => setAddCatOpen(false)} />
+          )}
+          {costoShop > 0 && <div style={{ background: "#e3f2fd", borderRadius: 10, padding: 12, marginTop: 10 }}>
+            <CostRow label="TOTALE LISTA SPESA" value={costoShop} highlight />
           </div>}
         </Section>
 
@@ -643,7 +730,7 @@ function App() {
         )}
 
         <div style={{ fontSize: 9, color: "#aaa", textAlign: "center", padding: "12px 0", lineHeight: 1.5 }}>
-          CasaCalc v2.3 · Costi Roma 2025 · I dati restano sul tuo dispositivo
+          CasaCalc v3.0 · Costi Roma 2025 · I dati restano sul tuo dispositivo
         </div>
       </div>
     </div>
