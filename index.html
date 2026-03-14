@@ -182,6 +182,80 @@ const FURN = [
 const renoQty = (it, mq, nB, nI, nP, nA) => ({ sqm: mq, fix: 1, bath: nB, inf: nI, por: nP, ac: nA }[it.type] || 1);
 const furnQty = (it, nB) => it.type === "bath" ? nB : 1;
 
+/* ═══════════════ SHOPPING LIST ═══════════════ */
+const SHOP = [
+  { cat: "lavatrice", icon: "🧺", label: "Lavatrice", items: [
+    { m: "Bosch WGG244Z0IT Serie 6", b: "Bosch", p: 550, c: "A", w: "EcoSilence 10 anni, ActiveWater, Iron Assist" },
+    { m: "LG F4R9009TPWC AI DD", b: "LG", p: 500, c: "A-40%", w: "AI tessuti, vapore, garanzia motore 10 anni" },
+    { m: "Samsung WW90CGC04DTEET", b: "Samsung", p: 450, c: "A", w: "Ecobubble, SmartThings, ottimo Q/P" },
+    { m: "Siemens WG44G2M9IT iQ500", b: "Siemens", p: 600, c: "A", w: "N.1 Altroconsumo, costruzione premium" },
+    { m: "Hisense WFQE9014EVJM", b: "Hisense", p: 380, c: "A", w: "Miglior budget, 9kg, vapore, silenziosa" },
+  ]},
+  { cat: "asciugatrice", icon: "💨", label: "Asciugatrice", items: [
+    { m: "LG RH90V9AVHN", b: "LG", p: 550, c: "A+++", w: "Dual Inverter, Allergy Care, garanzia 10 anni" },
+    { m: "Samsung DV90DG6845LBU3", b: "Samsung", p: 720, c: "A", w: "AI Control, classe A nuova etichetta" },
+    { m: "Bosch WQG233D1IT Serie 6", b: "Bosch", p: 580, c: "C", w: "AutoDry, condensatore autopulente" },
+    { m: "Miele TCL690WP 125", b: "Miele", p: 930, c: "A+++", w: "20 programmi, dura una vita" },
+    { m: "Beko BMTR38W", b: "Beko", p: 350, c: "A+", w: "Miglior budget, EcoGentle, 8kg" },
+  ]},
+  { cat: "frigo", icon: "❄️", label: "Frigorifero", items: [
+    { m: "Samsung RB53DG706AB1EF", b: "Samsung", p: 800, c: "A", w: "Primo classe A, AI Energy, 538L" },
+    { m: "Bosch KGN49VXDT Serie 4", b: "Bosch", p: 650, c: "C", w: "VitaFresh 0°C, No Frost, 440L" },
+    { m: "LG GBV3100DEP", b: "LG", p: 500, c: "D", w: "Linear Cooling, Door Cooling+, WiFi" },
+    { m: "Hisense RB440N4BCE", b: "Hisense", p: 380, c: "E", w: "Miglior budget, No Frost, 336L" },
+    { m: "Siemens KG49NAICT iQ500", b: "Siemens", p: 750, c: "C", w: "N.1 Altroconsumo, hyperFresh" },
+  ]},
+  { cat: "lavastoviglie", icon: "🍽️", label: "Lavastoviglie", items: [
+    { m: "Bosch SMV6YCX02E Serie 6", b: "Bosch", p: 650, c: "B", w: "PerfectDry Zeolite, Home Connect" },
+    { m: "Siemens SN65ZX49CE iQ500", b: "Siemens", p: 1060, c: "A", w: "Zeolite, varioSpeed, GlassZone" },
+    { m: "Bosch SMS4EVI14E Serie 4", b: "Bosch", p: 500, c: "C", w: "Miglior Q/P Bosch, ExtraDry, 14 cop." },
+    { m: "Miele G7160 SCVi", b: "Miele", p: 1350, c: "B", w: "AutoDos PowerDisk, 3D MultiFlex" },
+    { m: "Electrolux EEG69410L", b: "Electrolux", p: 550, c: "C", w: "AirDry auto, SatelliteClean, 15 cop." },
+  ]},
+  { cat: "forno", icon: "🔥", label: "Forno incasso", items: [
+    { m: "Bosch HBG578BB3 Serie 6", b: "Bosch", p: 550, c: "A", w: "Pirolisi, 71L, Home Connect, sonda" },
+    { m: "Samsung NV7B5760WBK", b: "Samsung", p: 700, c: "A+", w: "Dual Cook, vapore, Air Fry, 76L" },
+    { m: "Electrolux EOD6P77WZ", b: "Electrolux", p: 500, c: "A+", w: "SteamBake, pirolisi, 72L, sonda" },
+    { m: "Smeg SF6390XE", b: "Smeg", p: 450, c: "A", w: "Termoventilato, 70L, design elegante" },
+    { m: "Whirlpool W7 OM5 4S P", b: "Whirlpool", p: 480, c: "A+", w: "6° Senso, vapore, Air Fry, 73L" },
+  ]},
+  { cat: "piano", icon: "🍳", label: "Piano induzione", items: [
+    { m: "Bosch PXX675DC1E Serie 8", b: "Bosch", p: 650, c: "-", w: "FlexInduction, PerfectFry, conn. cappa" },
+    { m: "Electrolux EIS8648 Serie 800", b: "Electrolux", p: 550, c: "-", w: "Bridge, SenseBoil, Hob2Hood" },
+    { m: "Samsung NZ64B5045GK", b: "Samsung", p: 500, c: "-", w: "Dual Flex, Boost 3000W, SmartThings" },
+    { m: "AEG IKE64471FB", b: "AEG", p: 600, c: "-", w: "Bridge auto, Direktouch, PowerBoost" },
+    { m: "Hisense HI6421BSC", b: "Hisense", p: 280, c: "-", w: "Miglior budget, 4 zone, boost, timer" },
+  ]},
+  { cat: "cappa", icon: "🌬️", label: "Cappa", items: [
+    { m: "Elica NikolaTesla Fit", b: "Elica", p: 800, c: "A", w: "Aspirazione nel piano, Compasso d'Oro" },
+    { m: "Faber Inca Smart HC 52", b: "Faber", p: 250, c: "A", w: "Incasso totale, silenziosa, ottimo Q/P" },
+    { m: "Bosch DWB67CM50 Serie 6", b: "Bosch", p: 350, c: "A", w: "A parete 60cm, EcoSilence" },
+    { m: "Electrolux LFP329X", b: "Electrolux", p: 200, c: "B", w: "Sottopensile 90cm, Hob2Hood, economica" },
+    { m: "Franke FMY 907 BI BK", b: "Franke", p: 600, c: "A+", w: "Perimetrale, vetro nero, design" },
+  ]},
+  { cat: "lav_slim", icon: "🧺", label: "Lavatrice Slim", items: [
+    { m: "Hisense WFQE7012EVM 45cm", b: "Hisense", p: 380, c: "A", w: "45cm, 7kg, inverter, vapore, silenziosa" },
+    { m: "Midea MF10EW70B 45cm", b: "Midea", p: 350, c: "A", w: "45cm, 7kg, motore BLDC, Steam Care, -40% consumi" },
+    { m: "Beko BMWSU4721A 45cm", b: "Beko", p: 400, c: "A", w: "45cm, 7kg, EnergySpin -35%, AutoClean, 15 progr." },
+    { m: "Hoover H3WP4474TAM6 44cm", b: "Hoover", p: 370, c: "A", w: "44cm, 7kg, WiFi, vapore, 16 programmi" },
+    { m: "Samsung WW70K5210XW 46cm", b: "Samsung", p: 450, c: "A", w: "46cm, 7kg, AddWash, Smart Control, Digital Inverter" },
+  ]},
+  { cat: "asc_slim", icon: "💨", label: "Asciugatrice Slim", items: [
+    { m: "Candy CSO4H7A1DE-S 46.5cm", b: "Candy", p: 420, c: "A+", w: "46.5cm, 7kg, WiFi+BT, Kilo Detector, Woolmark" },
+    { m: "Beko DRXS722W 46cm", b: "Beko", p: 380, c: "A+", w: "46cm, 7kg, EcoGentle, 15 programmi, illuminaz." },
+    { m: "Hoover ND4 H7A2TCBEX 50cm", b: "Hoover", p: 450, c: "A++", w: "50cm, 7kg, WiFi+BT, Active Dry Sensor" },
+    { m: "Candy RO4H7A2TCEX-S 50cm", b: "Candy", p: 400, c: "A++", w: "50cm, 7kg, app hOn, 7 cicli rapidi" },
+    { m: "Beko DRXS712W 46cm", b: "Beko", p: 350, c: "A++", w: "46cm, 7kg, pompa calore, EcoGentle, budget" },
+  ]},
+  { cat: "clima_dual", icon: "❄️", label: "Clima Dual Split", items: [
+    { m: "Daikin 2MXM40M + 2x Perfera", b: "Daikin", p: 2200, c: "A+++", w: "9+9k BTU, SEER top, Flash Streamer, WiFi, R32" },
+    { m: "Mitsubishi MXZ-2F42VF + 2x AP", b: "Mitsubishi", p: 2000, c: "A+++", w: "9+9k BTU, SEER top, Plasma Quad, Night Mode" },
+    { m: "Samsung AJ040 + 2x WindFree", b: "Samsung", p: 1400, c: "A++", w: "9+9k BTU, WindFree 21k fori, AI Cooling, WiFi" },
+    { m: "LG MU2R15 + 2x Libero Smart", b: "LG", p: 1200, c: "A++", w: "9+9k BTU, Dual Inverter, UV Nano, ThinQ WiFi" },
+    { m: "Hisense 2AMW42U4RRA dual", b: "Hisense", p: 900, c: "A++", w: "9+9k BTU, budget, WiFi, Smart Air, R32" },
+  ]},
+];
+
 const ItemRow = ({ item, on, toggle, tier, qty, accent }) => {
   const cost = item.t[tier] * qty;
   return (
@@ -237,12 +311,12 @@ const emptyEval = () => ({
   id: uid(), label: "", url: "", prezzoRich: 0, offerta: 0, rendita: 0,
   mqC: 0, mqP: 0, autoMq: true, nB: 1, nI: 5, nP: 4, nA: 2,
   piano: "", asc: false, anno: 0, rT: "med", fT: "med", rOn: {}, fOn: {},
-  provvPct: 4, savedAt: null,
+  provvPct: 4, shopSel: {}, savedAt: null,
 });
 
 /* ═══════════════ MAIN APP ═══════════════ */
 function App() {
-  const [sec, setSec] = useState({ budget: true, prop: false, reno: true, arredo: true, costs: true, result: false });
+  const [sec, setSec] = useState({ budget: true, prop: false, reno: true, arredo: true, shop: true, costs: true, result: false });
   const tog = (s) => setSec(p => ({ ...p, [s]: !p[s] }));
 
   const [mutuo, setMutuo] = useState(() => LS.get('mutuo', 200000));
@@ -287,7 +361,18 @@ function App() {
   let costoArredo = 0;
   FURN.forEach(i => { if (cur.fOn[i.id]) costoArredo += i.t[cur.fT] * furnQty(i, cur.nB); });
 
-  const provvRate = (cur.provvPct != null ? cur.provvPct : 4) / 100;
+  let costoShop = 0;
+  const shopSel = cur.shopSel || {};
+  SHOP.forEach(cat => {
+    const sel = shopSel[cat.cat] || [];
+    if (sel.length > 0) {
+      const avg = sel.reduce((s, idx) => s + cat.items[idx].p, 0) / sel.length;
+      costoShop += Math.round(avg);
+    }
+  });
+  const costoArredoTot = costoArredo + costoShop;
+
+  const provvRate = (cur.provvPct || 4) / 100;
   const provvN = prezzo * provvRate, provvIVA = provvN * 0.22, provvT = provvN + provvIVA;
   const valCat = cur.rendita * 115.5;
   const impReg = cur.rendita > 0 ? Math.max(valCat * 0.02, 1000) : prezzo * 0.02;
@@ -295,22 +380,27 @@ function App() {
   const notaio = 5000;
   const perizia = 350, istrutt = 2500;
   const totSpAcq = provvT + totImp + notaio + perizia + istrutt;
-  const costoTot = prezzo + totSpAcq + costoRenoTot + costoArredo;
+  const costoTot = prezzo + totSpAcq + costoRenoTot + costoArredoTot;
 
   const detrAg = Math.min(provvN * 0.19, 1000);
   const detrReno = costoRenoTot * 0.5, detrRenoA = detrReno / 10;
-  const bmOk = costoReno > 0 && costoArredo > 0;
-  const detrMob = bmOk ? Math.min(costoArredo, 5000) * 0.5 : 0, detrMobA = detrMob / 10;
+  const bmOk = costoReno > 0 && costoArredoTot > 0;
+  const detrMob = bmOk ? Math.min(costoArredoTot, 5000) * 0.5 : 0, detrMobA = detrMob / 10;
   const detrTot = detrAg + detrReno + detrMob;
 
-  const budgNet = BUDGET - costoRenoTot - costoArredo;
+  const budgNet = BUDGET - costoRenoTot - costoArredoTot;
   const spFix = notaio + perizia + istrutt + impC + impI;
-  const provvTotRate = provvRate * 1.22; // netta + IVA 22%
+  const provvTotRate = provvRate * 1.22;
   const offMax = cur.rendita > 0 ? (budgNet - spFix - Math.max(cur.rendita * 115.5 * 0.02, 1000)) / (1 + provvTotRate) : (budgNet - spFix) / (1 + provvTotRate + 0.02);
   const over = costoTot > BUDGET, marg = BUDGET - costoTot;
 
   const toggleR = id => setCur(p => ({ ...p, rOn: { ...p.rOn, [id]: !p.rOn[id] } }));
   const toggleF = id => setCur(p => ({ ...p, fOn: { ...p.fOn, [id]: !p.fOn[id] } }));
+  const toggleShop = (cat, idx) => setCur(p => {
+    const prev = (p.shopSel || {})[cat] || [];
+    const next = prev.includes(idx) ? prev.filter(i => i !== idx) : [...prev, idx];
+    return { ...p, shopSel: { ...(p.shopSel || {}), [cat]: next } };
+  });
 
   return (
     <div style={{ minHeight: "100vh", minHeight: "100dvh", background: "linear-gradient(160deg, #f0f4f0 0%, #e8ede8 50%, #f5f0eb 100%)", fontFamily: "'DM Sans',sans-serif", overflowX: "hidden", width: "100%", boxSizing: "border-box" }}>
@@ -322,7 +412,7 @@ function App() {
             <span style={{ fontSize: 26 }}>🏠</span>
             <h1 style={{ margin: 0, fontSize: 20, fontWeight: 800 }}>CasaCalc</h1>
           </div>
-          <p style={{ margin: 0, fontSize: 12, opacity: 0.8 }}>Prima casa · Roma · Privato · Agenzia {cur.provvPct != null ? cur.provvPct : 4}%+IVA</p>
+          <p style={{ margin: 0, fontSize: 12, opacity: 0.8 }}>Prima casa · Roma · Privato · Agenzia {cur.provvPct || 4}%+IVA</p>
         </div>
       </div>
 
@@ -411,7 +501,7 @@ function App() {
           </div>
           <Toggle label="Ascensore" checked={cur.asc} onChange={v => upd("asc", v)} />
           <div style={{ marginTop: 4, paddingTop: 10, borderTop: "1px solid #eee" }}>
-            <Field label="Commissione agenzia (%)" value={cur.provvPct} onChange={v => upd("provvPct", v)} suffix="%" step={0.5} hint="Solo acquirente. 0 = privato senza agenzia" />
+            <Field label="Commissione agenzia (%)" value={cur.provvPct || 4} onChange={v => upd("provvPct", v)} suffix="%" step={0.5} hint="Solo acquirente. 0 = privato senza agenzia" />
           </div>
         </Section>
 
@@ -439,12 +529,57 @@ function App() {
           </div>}
         </Section>
 
+        {/* LISTA SPESA ELETTRODOMESTICI */}
+        <Section title="Lista Spesa" icon="🛒" color="#0d47a1" collapsed={sec.shop} onToggle={() => tog("shop")} badge={costoShop > 0 ? fmt(costoShop) : null}>
+          <p style={{ fontSize: 11, color: "#888", margin: "0 0 10px" }}>Seleziona i prodotti preferiti · Tocca il nome per cercare il miglior prezzo online</p>
+          {SHOP.map(cat => {
+            const sel = (cur.shopSel || {})[cat.cat] || [];
+            const catCost = sel.length > 0 ? Math.round(sel.reduce((s, idx) => s + cat.items[idx].p, 0) / sel.length) : 0;
+            return (
+              <div key={cat.cat} style={{ marginBottom: 14 }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: "#0d47a1" }}>{cat.icon} {cat.label}</span>
+                  {catCost > 0 && <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, fontWeight: 700, color: "#0d47a1", background: "#e3f2fd", padding: "2px 8px", borderRadius: 6 }}>
+                    {sel.length > 1 ? `media ` : ""}{fmt(catCost)}
+                  </span>}
+                </div>
+                {cat.items.map((it, idx) => {
+                  const on = sel.includes(idx);
+                  return (
+                    <div key={idx} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4, padding: "6px 8px", borderRadius: 8, background: on ? "#e3f2fd" : "transparent", border: on ? "1px solid #90caf9" : "1px solid transparent", transition: "all 0.15s" }}>
+                      <div onClick={() => toggleShop(cat.cat, idx)} style={{ width: 22, height: 22, borderRadius: 6, border: `2px solid ${on ? "#1565c0" : "#ccc"}`, background: on ? "#1565c0" : "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
+                        {on && <span style={{ color: "#fff", fontSize: 14, fontWeight: 700, lineHeight: 1 }}>✓</span>}
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div onClick={() => window.open(`https://www.google.com/search?tbm=shop&q=${encodeURIComponent(it.m)}`, '_blank')}
+                          style={{ fontSize: 12, fontWeight: 600, color: "#1565c0", cursor: "pointer", textDecoration: "underline", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          {it.m}
+                        </div>
+                        <div style={{ fontSize: 10, color: "#888" }}>{it.w}</div>
+                      </div>
+                      <div style={{ textAlign: "right", flexShrink: 0 }}>
+                        <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 12, fontWeight: 700, color: on ? "#1565c0" : "#999" }}>~{fmt(it.p)}</div>
+                        <div style={{ fontSize: 9, color: "#aaa" }}>{it.c}</div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+          {costoShop > 0 && <div style={{ background: "#e3f2fd", borderRadius: 10, padding: 12, marginTop: 8 }}>
+            <CostRow label="TOTALE ELETTRODOMESTICI" value={costoShop} highlight />
+            {Object.entries(cur.shopSel || {}).filter(([,v]) => v.length > 1).length > 0 &&
+              <div style={{ fontSize: 10, color: "#666", marginTop: 4 }}>💡 Categorie con più selezioni: viene usata la media dei prezzi</div>}
+          </div>}
+        </Section>
+
         {/* RIEPILOGO SPESE */}
         <Section title="Riepilogo Spese" icon="💰" color="#1565c0" collapsed={sec.costs} onToggle={() => tog("costs")}>
           {prezzo === 0 ? <p style={{ fontSize: 12, color: "#999", textAlign: "center", padding: 16 }}>Inserisci il prezzo</p> : (<>
             <div style={{ marginBottom: 10 }}>
               <span style={{ fontSize: 10, fontWeight: 700, color: "#1565c0", textTransform: "uppercase" }}>Provvigione Agenzia</span>
-              <CostRow label={`Netta (${cur.provvPct != null ? cur.provvPct : 4}%)`} value={provvN} detail={`${fmt(prezzo)} x ${cur.provvPct != null ? cur.provvPct : 4}%`} />
+              <CostRow label={`Netta (${cur.provvPct || 4}%)`} value={provvN} detail={`${fmt(prezzo)} x ${cur.provvPct || 4}%`} />
               <CostRow label="IVA (22%)" value={provvIVA} />
               <CostRow label="Totale provvigione" value={provvT} highlight />
               <div style={{ fontSize: 10, color: "#666", marginTop: 3 }}>Detraz. 19%: {fmt(detrAg)}</div>
@@ -477,6 +612,7 @@ function App() {
               <CostRow label="Spese acquisto" value={totSpAcq} />
               {costoRenoTot > 0 && <CostRow label={`Ristrutturazione (${TIER[cur.rT]})`} value={costoRenoTot} />}
               {costoArredo > 0 && <CostRow label={`Arredo (${TIER[cur.fT]})`} value={costoArredo} />}
+              {costoShop > 0 && <CostRow label="Elettrodomestici (Lista)" value={costoShop} />}
               <div style={{ height: 2, background: "#ddd", margin: "6px 0" }} />
               <CostRow label="COSTO TOTALE" value={costoTot} highlight />
             </div>
@@ -521,7 +657,7 @@ function App() {
         )}
 
         <div style={{ fontSize: 9, color: "#aaa", textAlign: "center", padding: "12px 0", lineHeight: 1.5 }}>
-          CasaCalc v2.1 · Costi Roma 2025 · I dati restano sul tuo dispositivo
+          CasaCalc v2.3 · Costi Roma 2025 · I dati restano sul tuo dispositivo
         </div>
       </div>
     </div>
