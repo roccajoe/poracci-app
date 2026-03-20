@@ -171,191 +171,16 @@ const RENO = [
   { id: "cont", label: "Controsoffitti", icon: "📐", type: "sqm", t: { eco: 30, med: 45, pre: 65 }, info: { eco: "Cartongesso singola lastra", med: "Doppia lastra, faretti", pre: "Sagomato, LED integrati" }, note: "Struttura, lastre, stuccatura, rasatura · IVA 10%, materiali e manodopera inclusi" },
 ];
 
-const ARREDO_DEFAULTS = [
-  { cat: "cucina", icon: "🍽️", label: "Cucina: Ante Legno + Isola/Penisola", items: [
-    { m: "IKEA Metod ante Ekestad rovere 300cm", p: 4500, w: "Eco · Ante rovere naturale, penisola, top laminato" },
-    { m: "IKEA Metod ante Voxtorp noce+penisola", p: 5500, w: "Med · Legno chiaro liscio, penisola con sgabelli" },
-    { m: "Creo Kitchens Lube ante legno+penisola", p: 7000, w: "Med · Ante rovere, top quarzo, penisola" },
-    { m: "Scavolini Liberamente cucina+isola legno", p: 12000, w: "Pre · Isola con sgabelli, rovere+laccato" },
-    { m: "Franke Maris lavello acciaio 2 vasche", p: 250, w: "Med · Incasso, inox satinato" },
-    { m: "Franke Mythos lavello fragranite 1.5v", p: 450, w: "Pre · Sottotop, antigraffio" },
-  ]},
-  { cat: "scaff_cucina", icon: "🔩", label: "Scaffalatura Metallica Colorata Cucina", items: [
-    { m: "Scaffale tubo metallo verniciato su misura artigiano", p: 800, w: "Med · Tubolare acciaio, verniciato RAL giallo/blu" },
-    { m: "SimonRack scaffale metallo 200x100cm blu/legno", p: 120, w: "Eco · Industrial, 5 ripiani, legno+metallo blu" },
-    { m: "Leroy Merlin LUCA libreria metallo blu", p: 100, w: "Eco · 100x90cm, stile industrial, colori vari" },
-    { m: "USM Haller scaffale modulare giallo", p: 2500, w: "Pre · Design svizzero, modulare, colori RAL" },
-    { m: "Fabbro locale Roma struttura su misura", p: 1200, w: "Med · Tubo tondo/quadro verniciato, su disegno" },
-  ]},
-  { cat: "cappa_design", icon: "🌬️", label: "Cappa Metallo Colorato / Statement", items: [
-    { m: "Cappa artigianale tubo metallo colorato su misura", p: 600, w: "Med · Fabbro, tubo verniciato RAL, aspirante" },
-    { m: "Elica NikolaTesla piano aspirante", p: 800, w: "Pre · Nel piano, nessun ingombro sopra" },
-    { m: "Smeg KPF9 cappa parete Portofino colorata", p: 700, w: "Med · Disponibile in colori pastello/bold" },
-    { m: "Falmec Virgola incasso sottopensile", p: 250, w: "Eco · 60cm, nascosta, silenziosa" },
-    { m: "Faber Cylindra Isola colorata", p: 500, w: "Med · Cilindrica, sospesa, bianca/nera/rossa" },
-  ]},
-  { cat: "piastrelle_cucina", icon: "◻️", label: "Piastrelle Bianche Cucina (Subway/Metro)", items: [
-    { m: "Piastrelle metro bianche lucide 10x20", p: 12, w: "Eco · Classiche subway, smaltate, /mq" },
-    { m: "Equipe Evolution bianco matt 7.5x15", p: 25, w: "Med · Formato piccolo, bordo arrotondato, /mq" },
-    { m: "Marazzi Lume White 6x24", p: 30, w: "Med · Effetto fatto a mano, lucida, /mq" },
-    { m: "Cevica Zellige bianco 10x10", p: 45, w: "Pre · Effetto artigianale marocchino, /mq" },
-    { m: "Mutina Mattonelle Margherita 20.5x20.5", p: 80, w: "Pre · Design Nathalie Du Pasquier, /mq" },
-  ]},
-  { cat: "cementine_bagno", icon: "🔶", label: "Cementine Geometriche Bagno (J)", items: [
-    { m: "CASA39 gres cementine geometriche 20x20", p: 15, w: "Eco · Gres Made in Italy, /mq" },
-    { m: "Marazzi D_Segni Colore cementine 20x20", p: 35, w: "Med · Gres, pattern geometrici, /mq" },
-    { m: "Forma&Cemento cementine artigianali Roma", p: 120, w: "Pre · Fatte a mano, cemento+pigmenti, /mq" },
-    { m: "LeCementine.it artigianali su progetto Roma", p: 150, w: "Pre · Showroom Via Anicio Paolino, /mq" },
-    { m: "Equipe Art Nouveau colour 20x20", p: 30, w: "Med · Gres smaltato, geometrico, /mq" },
-    { m: "Mosaic Factory cementine custom", p: 90, w: "Med · Artigianali Marocco, 25 anni esperienza, /mq" },
-  ]},
-  { cat: "piastr_handmade", icon: "🎨", label: "Piastrelle Handmade Colorate (O)", items: [
-    { m: "Cevica Zellige mix colori 10x10", p: 50, w: "Med · Effetto artigianale, terracotta/cream/azzurro, /mq" },
-    { m: "Equipe Artisan colori misti 6.5x20", p: 35, w: "Med · Smaltatura irregolare handmade, /mq" },
-    { m: "Marazzi Crogiolo Rice colori 5x20", p: 40, w: "Med · Sfumature irregolari, fatto a mano, /mq" },
-    { m: "Cerasarda Pitrizza terracotta artigianale", p: 70, w: "Pre · Sardegna, ceramica tradizionale, /mq" },
-    { m: "Mutina Mattonelle Margherita colori", p: 80, w: "Pre · Du Pasquier, pattern ludici, /mq" },
-    { m: "Ceramica Sant'Agostino Patchwork Classic", p: 40, w: "Med · Mix decorati, gres, /mq" },
-  ]},
-  { cat: "porte_colore", icon: "🚪", label: "Porte Laccate Colorate (P)", items: [
-    { m: "Garofoli Porta laccata RAL colore su misura", p: 600, w: "Med · Laccato opaco, qualsiasi colore RAL" },
-    { m: "FerreroLegno Porte colorate laccate", p: 700, w: "Med · Made in Italy, filo muro disponibile" },
-    { m: "IKEA Pax anta Flisberget colorata", p: 200, w: "Eco · Ante laccate singole, colori vari" },
-    { m: "Lualdi porte laccate filo muro", p: 1500, w: "Pre · Filo muro, laccato policromo, design" },
-    { m: "Eclisse Syntesis + anta laccata colore", p: 500, w: "Med · Scorrevole scomparsa, laccata a scelta" },
-    { m: "Porta tamburata laccata falegname locale", p: 400, w: "Eco · Su misura, laccata RAL, artigianale" },
-  ]},
-  { cat: "sedie_colorate", icon: "🪑", label: "Sedie Colorate Miste (T)", items: [
-    { m: "HAY About a Chair AAC22 colori misti x4", p: 800, w: "Med · Polipropilene+legno, mix&match" },
-    { m: "Kartell Masters colori misti x4", p: 800, w: "Pre · Starck, iconiche, impilabili" },
-    { m: "IKEA Odger colori assortiti x4", p: 280, w: "Eco · Plastica riciclata, 5 colori" },
-    { m: "Muuto Fiber Chair colori x4", p: 1200, w: "Pre · Plastica riciclata, gambe legno" },
-    { m: "Thonet 209 colorate laccate x4", p: 1600, w: "Pre · Legno curvato, classico rivisitato" },
-    { m: "Calligaris Skin colori misti x4", p: 600, w: "Med · Polipropilene, gambe legno faggio" },
-  ]},
-  { cat: "tavolo", icon: "🍽️", label: "Tavolo Legno/Metallo (U)", items: [
-    { m: "IKEA Lisabo tavolo rovere 140cm", p: 250, w: "Eco · Rovere impiallacciato, gambe incrociate" },
-    { m: "IKEA Skogsta tavolo acacia 235cm", p: 500, w: "Eco · Legno massello, grande, gambe metallo" },
-    { m: "Calligaris Duca tavolo allungabile 130/190", p: 800, w: "Med · Rovere+metallo, allungabile" },
-    { m: "Hay CPH30 tavolo rovere 200cm", p: 1200, w: "Med · Rovere massello, gambe sottili" },
-    { m: "Bonaldo Big Table 200cm", p: 2200, w: "Pre · Piano noce/ceramica, gambe acciaio" },
-    { m: "Tavolo artigianale legno recupero+ferro", p: 900, w: "Med · Falegname locale, su misura, ferro+legno" },
-  ]},
-  { cat: "libreria", icon: "📚", label: "Libreria Moduli Legno (W)", items: [
-    { m: "IKEA Kallax 4x4 configurazione modulare", p: 150, w: "Eco · 147x147cm, nicchie quadrate, personalizzabile" },
-    { m: "IKEA Eket composizione a parete", p: 300, w: "Eco · Moduli misti, colori, asimmetrica" },
-    { m: "Muuto Stacked scaffale modulare", p: 1500, w: "Pre · Moduli asimmetrici, legno+laccato" },
-    { m: "String Pocket mensole modulari x3", p: 450, w: "Med · Metallo+legno, composizione libera" },
-    { m: "Falegname locale libreria compensato su misura", p: 1200, w: "Med · Betulla/rovere, nicchie irregolari, su disegno" },
-    { m: "USM Haller libreria modulare colori", p: 2800, w: "Pre · Modulare infinito, acciaio+pannelli" },
-  ]},
-  { cat: "sanitari", icon: "🚿", label: "Sanitari + Rubinetteria", items: [
-    { m: "Ideal Standard Tesi wc+bidet sospesi", p: 350, w: "Eco · Sospesi, sedile slim" },
-    { m: "Grohe Eurosmart rubinetteria bagno set", p: 250, w: "Eco · Lavabo + bidet + doccia" },
-    { m: "Roca The Gap wc+bidet sospesi Rimless", p: 550, w: "Med · Rimless, design pulito" },
-    { m: "Duravit ME by Starck wc+bidet sospesi", p: 900, w: "Pre · Design Philippe Starck" },
-    { m: "Hansgrohe Talis E rubinetteria set completo", p: 700, w: "Pre · EcoSmart, ComfortZone" },
-  ]},
-  { cat: "mob_bagno", icon: "🪞", label: "Mobile Bagno", items: [
-    { m: "IKEA Godmorgon mobile bagno 80cm", p: 400, w: "Eco · Lavabo incluso, specchio" },
-    { m: "Leroy Merlin Remix mobile bagno 90cm", p: 350, w: "Eco · Sospeso, cassetti soft-close" },
-    { m: "IKEA Hemnes mobile bagno 100cm", p: 700, w: "Med · Legno massello, specchio LED" },
-    { m: "Scavolini Idro mobile bagno 100cm", p: 1500, w: "Pre · Design italiano, top minerale" },
-  ]},
-  { cat: "camera", icon: "🛏️", label: "Camera: Letto + Comodini + Armadio", items: [
-    { m: "IKEA Malm letto matr. 160 + contenitore", p: 250, w: "Eco · Contenitore, bianco/rovere" },
-    { m: "IKEA Malm comodini x2", p: 100, w: "Eco · 2 cassetti" },
-    { m: "IKEA Pax armadio 200cm ante scorrevoli", p: 600, w: "Eco · Accessori interni inclusi" },
-    { m: "Maisons du Monde letto Fjord 160", p: 500, w: "Med · Testiera imbottita" },
-    { m: "Lago Fluttua letto sospeso 160", p: 2500, w: "Pre · Effetto fluttuante, design" },
-  ]},
-  { cat: "living", icon: "🛋️", label: "Living: Divano Letto", items: [
-    { m: "IKEA Friheten divano letto angolare", p: 500, w: "Eco · Contenitore, 230cm, chaise" },
-    { m: "IKEA Vimle divano letto 3 posti", p: 700, w: "Eco · Sfoderabile, materasso schiuma" },
-    { m: "Poltrone Sofà divano letto 3 posti", p: 1200, w: "Med · Rete a doghe, materasso 14cm" },
-    { m: "Natuzzi Editions divano letto B883", p: 2000, w: "Pre · Pelle, meccanismo italiano" },
-    { m: "Dorelan divano letto Slim materasso HR", p: 2500, w: "Pre · Materasso alto, uso quotidiano" },
-  ]},
+const FURN = [
+  { id: "m_bag", label: "Mobile Bagno", icon: "🪞", type: "bath", t: { eco: 500, med: 1000, pre: 1800 }, info: { eco: "IKEA Godmorgon", med: "IKEA Hemnes premium", pre: "Idea Group / Scavolini" }, note: "Lavabo, specchio, colonna" },
+  { id: "cuc_a", label: "Cucina completa", icon: "🍽", type: "fix", t: { eco: 3000, med: 5500, pre: 10000 }, info: { eco: "IKEA Knoxhult, Mondo Conv.", med: "IKEA Metod, Creo/Lube", pre: "Scavolini/Veneta, quarzo" }, note: "Basi, pensili, top, lavello. No elettrodom." },
+  { id: "edom", label: "Elettrodomestici", icon: "🔌", type: "fix", t: { eco: 2000, med: 3200, pre: 5000 }, info: { eco: "IKEA/Indesit/Candy", med: "Bosch/Electrolux induzione", pre: "Siemens/Miele/Neff premium" }, note: "Cottura, forno, frigo, lavast., cappa" },
+  { id: "lav", label: "Lavatrice", icon: "🫧", type: "fix", t: { eco: 300, med: 400, pre: 600 }, info: { eco: "Candy/Indesit 8kg", med: "Samsung/LG 9kg", pre: "Bosch/Miele AutoDose" }, note: "Carica frontale" },
+  { id: "asc2", label: "Asciugatrice", icon: "💨", type: "fix", t: { eco: 320, med: 420, pre: 600 }, info: { eco: "Candy/Beko A+", med: "Samsung/LG A++", pre: "Bosch/Miele A+++" }, note: "Pompa di calore" },
 ];
 
 const renoQty = (it, mq, nB, nI, nP, nA) => ({ sqm: mq, fix: 1, bath: nB, inf: nI, por: nP, ac: nA }[it.type] || 1);
-
-/* ═══════════════ SHOPPING LIST ═══════════════ */
-const SHOP_DEFAULTS = [
-  { cat: "frigo", icon: "❄️", label: "Frigorifero", items: [
-    { m: "Samsung RB53DG706AB1EF", p: 800, w: "Pre · Primo classe A, AI Energy, 538L" },
-    { m: "Bosch KGN49VXDT Serie 4", p: 650, w: "Med · VitaFresh 0°C, No Frost, 440L" },
-    { m: "LG GBV3100DEP", p: 500, w: "Med · Linear Cooling, Door Cooling+, WiFi" },
-    { m: "Hisense RB440N4BCE", p: 380, w: "Eco · Miglior budget, No Frost, 336L" },
-    { m: "Siemens KG49NAICT iQ500", p: 750, w: "Pre · N.1 Altroconsumo, hyperFresh" },
-  ]},
-  { cat: "lavastoviglie", icon: "🍽️", label: "Lavastoviglie", items: [
-    { m: "Bosch SMV6YCX02E Serie 6", p: 650, w: "Med · PerfectDry Zeolite, Home Connect" },
-    { m: "Siemens SN65ZX49CE iQ500", p: 1060, w: "Pre · Zeolite, varioSpeed, GlassZone" },
-    { m: "Bosch SMS4EVI14E Serie 4", p: 500, w: "Eco · Miglior Q/P Bosch, ExtraDry, 14 cop." },
-    { m: "Miele G7160 SCVi", p: 1350, w: "Pre · AutoDos PowerDisk, 3D MultiFlex" },
-    { m: "Electrolux EEG69410L", p: 550, w: "Med · AirDry auto, SatelliteClean, 15 cop." },
-  ]},
-  { cat: "forno", icon: "🔥", label: "Forno incasso", items: [
-    { m: "Bosch HBG578BB3 Serie 6", p: 550, w: "Med · Pirolisi, 71L, Home Connect, sonda" },
-    { m: "Samsung NV7B5760WBK", p: 700, w: "Pre · Dual Cook, vapore, Air Fry, 76L" },
-    { m: "Electrolux EOD6P77WZ", p: 500, w: "Med · SteamBake, pirolisi, 72L, sonda" },
-    { m: "Smeg SF6390XE", p: 450, w: "Eco · Termoventilato, 70L, design elegante" },
-    { m: "Whirlpool W7 OM5 4S P", p: 480, w: "Med · 6° Senso, vapore, Air Fry, 73L" },
-  ]},
-  { cat: "piano", icon: "🍳", label: "Piano induzione", items: [
-    { m: "Bosch PXX675DC1E Serie 8", p: 650, w: "Pre · FlexInduction, PerfectFry, conn. cappa" },
-    { m: "Electrolux EIS8648 Serie 800", p: 550, w: "Med · Bridge, SenseBoil, Hob2Hood" },
-    { m: "Samsung NZ64B5045GK", p: 500, w: "Med · Dual Flex, Boost 3000W, SmartThings" },
-    { m: "AEG IKE64471FB", p: 600, w: "Pre · Bridge auto, Direktouch, PowerBoost" },
-    { m: "Hisense HI6421BSC", p: 280, w: "Eco · Miglior budget, 4 zone, boost, timer" },
-  ]},
-  { cat: "cappa", icon: "🌬️", label: "Cappa", items: [
-    { m: "Elica NikolaTesla Fit", p: 800, w: "Pre · Aspirazione nel piano, Compasso d'Oro" },
-    { m: "Faber Inca Smart HC 52", p: 250, w: "Eco · Incasso totale, silenziosa, ottimo Q/P" },
-    { m: "Bosch DWB67CM50 Serie 6", p: 350, w: "Med · A parete 60cm, EcoSilence" },
-    { m: "Electrolux LFP329X", p: 200, w: "Eco · Sottopensile 90cm, Hob2Hood, economica" },
-    { m: "Franke FMY 907 BI BK", p: 600, w: "Pre · Perimetrale, vetro nero, design" },
-  ]},
-  { cat: "lav_slim", icon: "🧺", label: "Lavatrice Slim", items: [
-    { m: "Hisense WFQE7012EVM 45cm", p: 380, w: "Eco · 45cm, 7kg, inverter, vapore, silenziosa" },
-    { m: "Midea MF10EW70B 45cm", p: 350, w: "Eco · 45cm, 7kg, BLDC, Steam Care, -40% consumi" },
-    { m: "Beko BMWSU4721A 45cm", p: 400, w: "Med · 45cm, 7kg, EnergySpin, AutoClean" },
-    { m: "Hoover H3WP4474TAM6 44cm", p: 370, w: "Eco · 44cm, 7kg, WiFi, vapore, 16 programmi" },
-    { m: "Samsung WW70K5210XW 46cm", p: 450, w: "Med · 46cm, 7kg, AddWash, Smart Control" },
-  ]},
-  { cat: "asc_slim", icon: "💨", label: "Asciugatrice Slim", items: [
-    { m: "Candy CSO4H7A1DE-S 46.5cm", p: 420, w: "Med · 46.5cm, 7kg, WiFi+BT, Kilo Detector" },
-    { m: "Beko DRXS722W 46cm", p: 380, w: "Eco · 46cm, 7kg, EcoGentle, 15 programmi" },
-    { m: "Hoover ND4 H7A2TCBEX 50cm", p: 450, w: "Med · 50cm, 7kg, WiFi+BT, Active Dry Sensor" },
-    { m: "Candy RO4H7A2TCEX-S 50cm", p: 400, w: "Med · 50cm, 7kg, app hOn, 7 cicli rapidi" },
-    { m: "Beko DRXS712W 46cm", p: 350, w: "Eco · 46cm, 7kg, pompa calore, EcoGentle" },
-  ]},
-  { cat: "clima_dual", icon: "🌡️", label: "Clima Dual Split", items: [
-    { m: "Daikin 2MXM40M + 2x Perfera", p: 2200, w: "Pre · 9+9k BTU, SEER top, Flash Streamer, R32" },
-    { m: "Mitsubishi MXZ-2F42VF + 2x AP", p: 2000, w: "Pre · 9+9k BTU, Plasma Quad, Night Mode" },
-    { m: "Samsung AJ040 + 2x WindFree", p: 1400, w: "Med · 9+9k BTU, WindFree, AI Cooling, WiFi" },
-    { m: "LG MU2R15 + 2x Libero Smart", p: 1200, w: "Med · 9+9k BTU, Dual Inverter, UV Nano" },
-    { m: "Hisense 2AMW42U4RRA dual", p: 900, w: "Eco · 9+9k BTU, budget, WiFi, Smart Air" },
-  ]},
-  { cat: "aspira", icon: "🧹", label: "Aspirapolvere", items: [
-    { m: "Dyson V15 Detect Absolute", p: 700, w: "Pre · Laser polveri, display LCD, 60min" },
-    { m: "Dyson V12 Detect Slim", p: 500, w: "Med · Laser, leggero 2.2kg, 60min" },
-    { m: "Samsung Bespoke Jet AI", p: 600, w: "Pre · AI riconosce pavimenti, base svuota" },
-    { m: "Bosch Unlimited 7 ProAnimal", p: 400, w: "Med · Batteria estraibile, turbo spazzola" },
-    { m: "Xiaomi G11 cordless", p: 200, w: "Eco · 150W, display, 60min, ottimo budget" },
-    { m: "Rowenta X-Force Flex 14.60", p: 350, w: "Med · Flessibile 180°, luci LED, Animal" },
-  ]},
-  { cat: "robot", icon: "🤖", label: "Robot Aspira/Lava", items: [
-    { m: "Roborock S8 MaxV Ultra", p: 1200, w: "Pre · Lidar+camera, lavaggio vibra, base svuota+lava" },
-    { m: "Roborock Q7 Max+", p: 500, w: "Med · Lidar, lavaggio, base svuotamento, WiFi" },
-    { m: "Ecovacs Deebot T30S Combo", p: 900, w: "Pre · Robot+aspira portatile, base tutto-in-uno" },
-    { m: "Dreame L10s Ultra", p: 700, w: "Med · Lidar, mop rotante, base auto-svuota/lava" },
-    { m: "Xiaomi Robot Vacuum X10+", p: 450, w: "Eco · Lidar, lavaggio, base svuota, budget top" },
-    { m: "iRobot Roomba Combo j5+", p: 550, w: "Med · Aspirazione potente, lavaggio smart, base" },
-  ]},
-];
-const ICONS = ["🛒","🛋️","💡","🪑","🚿","🧹","🖼️","🛏️","📺","🔧","🏠","🪞","🧰","🫧","🔌","🍽️","❄️","🔥","🧺","💨","🌬️","🍳","📐","🧱"];
+const furnQty = (it, nB) => it.type === "bath" ? nB : 1;
 
 const ItemRow = ({ item, on, toggle, tier, qty, accent }) => {
   const cost = item.t[tier] * qty;
@@ -407,62 +232,17 @@ const DiscountBadge = ({ prezzo, offerta }) => {
   );
 };
 
-/* ═══════════════ ADD FORMS ═══════════════ */
-const AddItemForm = ({ onAdd, onCancel }) => {
-  const [m, setM] = useState("");
-  const [p, setP] = useState("");
-  return (
-    <div style={{ background: "#f5f9ff", borderRadius: 8, padding: 10, marginTop: 6, border: "1px solid #90caf9" }}>
-      <div style={{ fontSize: 11, fontWeight: 700, color: "#1565c0", marginBottom: 6 }}>Aggiungi prodotto</div>
-      <input type="text" placeholder="Nome prodotto" value={m} onChange={e => setM(e.target.value)}
-        style={{ width: "100%", boxSizing: "border-box", padding: "8px", borderRadius: 6, border: "1px solid #ddd", fontSize: 14, marginBottom: 6, fontFamily: "'DM Sans',sans-serif" }} />
-      <div style={{ display: "flex", gap: 6 }}>
-        <input type="text" inputMode="decimal" placeholder="Prezzo €" value={p} onChange={e => setP(e.target.value)}
-          style={{ flex: 1, padding: "8px", borderRadius: 6, border: "1px solid #ddd", fontSize: 14, fontFamily: "'DM Mono',monospace" }} />
-        <button onClick={() => { if (m && p) onAdd(m, p); }} disabled={!m || !p}
-          style={{ padding: "8px 16px", borderRadius: 6, border: "none", background: m && p ? "#1565c0" : "#ccc", color: "#fff", fontWeight: 700, fontSize: 12, cursor: m && p ? "pointer" : "default" }}>Aggiungi</button>
-        <button onClick={onCancel}
-          style={{ padding: "8px 12px", borderRadius: 6, border: "1px solid #ccc", background: "#fff", color: "#666", fontSize: 12, cursor: "pointer" }}>✕</button>
-      </div>
-    </div>
-  );
-};
-
-const AddCatForm = ({ onAdd, onCancel }) => {
-  const [label, setLabel] = useState("");
-  const [icon, setIcon] = useState("🛒");
-  return (
-    <div style={{ background: "#f5f9ff", borderRadius: 10, padding: 12, marginTop: 6, border: "1px solid #90caf9" }}>
-      <div style={{ fontSize: 11, fontWeight: 700, color: "#1565c0", marginBottom: 8 }}>Nuova categoria</div>
-      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
-        {ICONS.map(ic => (
-          <div key={ic} onClick={() => setIcon(ic)}
-            style={{ width: 32, height: 32, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, cursor: "pointer", background: icon === ic ? "#e3f2fd" : "transparent", border: icon === ic ? "2px solid #1565c0" : "2px solid transparent" }}>{ic}</div>
-        ))}
-      </div>
-      <div style={{ display: "flex", gap: 6 }}>
-        <input type="text" placeholder="Nome categoria" value={label} onChange={e => setLabel(e.target.value)}
-          style={{ flex: 1, padding: "8px", borderRadius: 6, border: "1px solid #ddd", fontSize: 14, fontFamily: "'DM Sans',sans-serif" }} />
-        <button onClick={() => { if (label) onAdd(label, icon); }} disabled={!label}
-          style={{ padding: "8px 16px", borderRadius: 6, border: "none", background: label ? "#1565c0" : "#ccc", color: "#fff", fontWeight: 700, fontSize: 12, cursor: label ? "pointer" : "default" }}>Crea</button>
-        <button onClick={onCancel}
-          style={{ padding: "8px 12px", borderRadius: 6, border: "1px solid #ccc", background: "#fff", color: "#666", fontSize: 12, cursor: "pointer" }}>✕</button>
-      </div>
-    </div>
-  );
-};
-
 /* ═══════════════ EMPTY EVAL ═══════════════ */
 const emptyEval = () => ({
   id: uid(), label: "", url: "", prezzoRich: 0, offerta: 0, rendita: 0,
   mqC: 0, mqP: 0, autoMq: true, nB: 1, nI: 5, nP: 4, nA: 2,
   piano: "", asc: false, anno: 0, rT: "med", fT: "med", rOn: {}, fOn: {},
-  provvPct: 4, shopSel: {}, savedAt: null,
+  provvPct: 4, savedAt: null,
 });
 
 /* ═══════════════ MAIN APP ═══════════════ */
 function App() {
-  const [sec, setSec] = useState({ budget: true, prop: false, reno: true, arredo: true, shop: true, costs: true, result: false });
+  const [sec, setSec] = useState({ budget: true, prop: false, reno: true, arredo: true, costs: true, result: false });
   const tog = (s) => setSec(p => ({ ...p, [s]: !p[s] }));
 
   const [mutuo, setMutuo] = useState(() => LS.get('mutuo', 200000));
@@ -471,12 +251,6 @@ function App() {
 
   const [saved, setSaved] = useState(() => LS.get('saved', []));
   const [cur, setCur] = useState(() => LS.get('current', emptyEval()));
-  const [shopList, setShopList] = useState(() => LS.get('shopList', SHOP_DEFAULTS));
-  const [arredoList, setArredoList] = useState(() => LS.get('arredoList', ARREDO_DEFAULTS));
-  const [addCatOpen, setAddCatOpen] = useState(false);
-  const [addCatOpenA, setAddCatOpenA] = useState(false);
-  const [addItemCat, setAddItemCat] = useState(null);
-  const [addItemCatA, setAddItemCatA] = useState(null);
   const upd = (k, v) => setCur(p => ({ ...p, [k]: v }));
 
   /* Persist to localStorage */
@@ -484,53 +258,8 @@ function App() {
   useEffect(() => { LS.set('liq', liq); }, [liq]);
   useEffect(() => { LS.set('saved', saved); }, [saved]);
   useEffect(() => { LS.set('current', cur); }, [cur]);
-  useEffect(() => { LS.set('shopList', shopList); }, [shopList]);
-  useEffect(() => { LS.set('arredoList', arredoList); }, [arredoList]);
 
   useEffect(() => { if (cur.autoMq && cur.mqC > 0) upd("mqP", Math.round(cur.mqC * 0.82)); }, [cur.mqC, cur.autoMq]);
-
-  /* Shop list management */
-  const addShopCat = (label, icon) => {
-    const cat = "custom_" + uid();
-    setShopList(p => [...p, { cat, icon, label, items: [] }]);
-    setAddCatOpen(false);
-  };
-  const delShopCat = (cat) => {
-    setShopList(p => p.filter(c => c.cat !== cat));
-    setCur(p => { const s = { ...(p.shopSel || {}) }; delete s[cat]; return { ...p, shopSel: s }; });
-  };
-  const addShopItem = (cat, m, p) => {
-    setShopList(prev => prev.map(c => c.cat === cat ? { ...c, items: [...c.items, { m, p: Number(p), w: "" }] } : c));
-    setAddItemCat(null);
-  };
-  const delShopItem = (cat, idx) => {
-    setShopList(prev => prev.map(c => c.cat === cat ? { ...c, items: c.items.filter((_, i) => i !== idx) } : c));
-    setCur(p => { const sel = ((p.shopSel || {})[cat] || []).filter(i => i !== idx).map(i => i > idx ? i - 1 : i); return { ...p, shopSel: { ...(p.shopSel || {}), [cat]: sel } }; });
-  };
-
-  /* Arredo list management */
-  const addArredoCat = (label, icon) => {
-    const cat = "acustom_" + uid();
-    setArredoList(p => [...p, { cat, icon, label, items: [] }]);
-    setAddCatOpenA(false);
-  };
-  const delArredoCat = (cat) => {
-    setArredoList(p => p.filter(c => c.cat !== cat));
-    setCur(p => { const s = { ...(p.arredoSel || {}) }; delete s[cat]; return { ...p, arredoSel: s }; });
-  };
-  const addArredoItem = (cat, m, p) => {
-    setArredoList(prev => prev.map(c => c.cat === cat ? { ...c, items: [...c.items, { m, p: Number(p), w: "" }] } : c));
-    setAddItemCatA(null);
-  };
-  const delArredoItem = (cat, idx) => {
-    setArredoList(prev => prev.map(c => c.cat === cat ? { ...c, items: c.items.filter((_, i) => i !== idx) } : c));
-    setCur(p => { const sel = ((p.arredoSel || {})[cat] || []).filter(i => i !== idx).map(i => i > idx ? i - 1 : i); return { ...p, arredoSel: { ...(p.arredoSel || {}), [cat]: sel } }; });
-  };
-  const toggleArredo = (cat, idx) => setCur(p => {
-    const prev = (p.arredoSel || {})[cat] || [];
-    const next = prev.includes(idx) ? prev.filter(i => i !== idx) : [...prev, idx];
-    return { ...p, arredoSel: { ...(p.arredoSel || {}), [cat]: next } };
-  });
 
   /* Save */
   const doSave = () => {
@@ -555,30 +284,10 @@ function App() {
   RENO.forEach(i => { if (cur.rOn[i.id]) costoReno += i.t[cur.rT] * renoQty(i, mq, cur.nB, cur.nI, cur.nP, cur.nA); });
   const spTecn = costoReno > 0 ? costoReno * 0.08 : 0;
   const costoRenoTot = costoReno + spTecn;
-
-  /* Arredo cost from arredoList selections */
   let costoArredo = 0;
-  const arredoSel = cur.arredoSel || {};
-  arredoList.forEach(cat => {
-    const sel = arredoSel[cat.cat] || [];
-    sel.forEach(idx => { if (idx < cat.items.length) costoArredo += cat.items[idx].p; });
-  });
+  FURN.forEach(i => { if (cur.fOn[i.id]) costoArredo += i.t[cur.fT] * furnQty(i, cur.nB); });
 
-  let costoShop = 0;
-  const shopSel = cur.shopSel || {};
-  shopList.forEach(cat => {
-    const sel = shopSel[cat.cat] || [];
-    if (sel.length > 0) {
-      const validSel = sel.filter(idx => idx < cat.items.length);
-      if (validSel.length > 0) {
-        const avg = validSel.reduce((s, idx) => s + cat.items[idx].p, 0) / validSel.length;
-        costoShop += Math.round(avg);
-      }
-    }
-  });
-  const costoArredoTot = costoArredo + costoShop;
-
-  const provvRate = (cur.provvPct || 4) / 100;
+  const provvRate = (cur.provvPct != null ? cur.provvPct : 4) / 100;
   const provvN = prezzo * provvRate, provvIVA = provvN * 0.22, provvT = provvN + provvIVA;
   const valCat = cur.rendita * 115.5;
   const impReg = cur.rendita > 0 ? Math.max(valCat * 0.02, 1000) : prezzo * 0.02;
@@ -586,27 +295,22 @@ function App() {
   const notaio = 5000;
   const perizia = 350, istrutt = 2500;
   const totSpAcq = provvT + totImp + notaio + perizia + istrutt;
-  const costoTot = prezzo + totSpAcq + costoRenoTot + costoArredoTot;
+  const costoTot = prezzo + totSpAcq + costoRenoTot + costoArredo;
 
   const detrAg = Math.min(provvN * 0.19, 1000);
   const detrReno = costoRenoTot * 0.5, detrRenoA = detrReno / 10;
-  const bmOk = costoReno > 0 && costoArredoTot > 0;
-  const detrMob = bmOk ? Math.min(costoArredoTot, 5000) * 0.5 : 0, detrMobA = detrMob / 10;
+  const bmOk = costoReno > 0 && costoArredo > 0;
+  const detrMob = bmOk ? Math.min(costoArredo, 5000) * 0.5 : 0, detrMobA = detrMob / 10;
   const detrTot = detrAg + detrReno + detrMob;
 
-  const budgNet = BUDGET - costoRenoTot - costoArredoTot;
+  const budgNet = BUDGET - costoRenoTot - costoArredo;
   const spFix = notaio + perizia + istrutt + impC + impI;
-  const provvTotRate = provvRate * 1.22;
+  const provvTotRate = provvRate * 1.22; // netta + IVA 22%
   const offMax = cur.rendita > 0 ? (budgNet - spFix - Math.max(cur.rendita * 115.5 * 0.02, 1000)) / (1 + provvTotRate) : (budgNet - spFix) / (1 + provvTotRate + 0.02);
   const over = costoTot > BUDGET, marg = BUDGET - costoTot;
 
   const toggleR = id => setCur(p => ({ ...p, rOn: { ...p.rOn, [id]: !p.rOn[id] } }));
   const toggleF = id => setCur(p => ({ ...p, fOn: { ...p.fOn, [id]: !p.fOn[id] } }));
-  const toggleShop = (cat, idx) => setCur(p => {
-    const prev = (p.shopSel || {})[cat] || [];
-    const next = prev.includes(idx) ? prev.filter(i => i !== idx) : [...prev, idx];
-    return { ...p, shopSel: { ...(p.shopSel || {}), [cat]: next } };
-  });
 
   return (
     <div style={{ minHeight: "100vh", minHeight: "100dvh", background: "linear-gradient(160deg, #f0f4f0 0%, #e8ede8 50%, #f5f0eb 100%)", fontFamily: "'DM Sans',sans-serif", overflowX: "hidden", width: "100%", boxSizing: "border-box" }}>
@@ -618,7 +322,7 @@ function App() {
             <span style={{ fontSize: 26 }}>🏠</span>
             <h1 style={{ margin: 0, fontSize: 20, fontWeight: 800 }}>CasaCalc</h1>
           </div>
-          <p style={{ margin: 0, fontSize: 12, opacity: 0.8 }}>Prima casa · Roma · Privato · Agenzia {cur.provvPct || 4}%+IVA</p>
+          <p style={{ margin: 0, fontSize: 12, opacity: 0.8 }}>Prima casa · Roma · Privato · Agenzia {cur.provvPct != null ? cur.provvPct : 4}%+IVA</p>
         </div>
       </div>
 
@@ -707,7 +411,7 @@ function App() {
           </div>
           <Toggle label="Ascensore" checked={cur.asc} onChange={v => upd("asc", v)} />
           <div style={{ marginTop: 4, paddingTop: 10, borderTop: "1px solid #eee" }}>
-            <Field label="Commissione agenzia (%)" value={cur.provvPct || 4} onChange={v => upd("provvPct", v)} suffix="%" step={0.5} hint="Solo acquirente. 0 = privato senza agenzia" />
+            <Field label="Commissione agenzia (%)" value={cur.provvPct} onChange={v => upd("provvPct", v)} suffix="%" step={0.5} hint="Solo acquirente. 0 = privato senza agenzia" />
           </div>
         </Section>
 
@@ -725,121 +429,13 @@ function App() {
         </Section>
 
         {/* ARREDO */}
-        <Section title="Arredo" icon="🛋️" color="#6a1b9a" collapsed={sec.arredo} onToggle={() => tog("arredo")} badge={costoArredo > 0 ? fmt(costoArredo) : null}>
-          <p style={{ fontSize: 11, color: "#888", margin: "0 0 10px" }}>Tocca il nome per cercare il prezzo · Eco/Med/Pre nel dettaglio · Aggiungi categorie</p>
-          {arredoList.map(cat => {
-            const sel = (cur.arredoSel || {})[cat.cat] || [];
-            const catCost = sel.reduce((s, idx) => idx < cat.items.length ? s + cat.items[idx].p : s, 0);
-            return (
-              <div key={cat.cat} style={{ marginBottom: 14, borderBottom: "1px solid #f0e6f6", paddingBottom: 10 }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: "#6a1b9a" }}>{cat.icon} {cat.label}</span>
-                  <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-                    {catCost > 0 && <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, fontWeight: 700, color: "#6a1b9a", background: "#f3e5f5", padding: "2px 8px", borderRadius: 6 }}>{fmt(catCost)}</span>}
-                    <button onClick={() => setAddItemCatA(addItemCatA === cat.cat ? null : cat.cat)}
-                      style={{ width: 24, height: 24, borderRadius: 12, border: "1px solid #ce93d8", background: addItemCatA === cat.cat ? "#6a1b9a" : "#f3e5f5", color: addItemCatA === cat.cat ? "#fff" : "#6a1b9a", fontSize: 16, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1 }}>+</button>
-                    {cat.cat.startsWith("acustom_") && <button onClick={() => { if(confirm("Eliminare " + cat.label + "?")) delArredoCat(cat.cat); }}
-                      style={{ width: 24, height: 24, borderRadius: 12, border: "none", background: "#ffebee", color: "#c62828", fontSize: 12, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>}
-                  </div>
-                </div>
-                {cat.items.map((it, idx) => {
-                  const on = sel.includes(idx);
-                  const tier = (it.w || "").startsWith("Eco") ? "#4caf50" : (it.w || "").startsWith("Med") ? "#ff9800" : (it.w || "").startsWith("Pre") ? "#9c27b0" : "#888";
-                  return (
-                    <div key={idx} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4, padding: "6px 8px", borderRadius: 8, background: on ? "#f3e5f5" : "transparent", border: on ? "1px solid #ce93d8" : "1px solid transparent" }}>
-                      <div onClick={() => toggleArredo(cat.cat, idx)} style={{ width: 22, height: 22, borderRadius: 6, border: `2px solid ${on ? "#6a1b9a" : "#ccc"}`, background: on ? "#6a1b9a" : "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
-                        {on && <span style={{ color: "#fff", fontSize: 14, fontWeight: 700, lineHeight: 1 }}>✓</span>}
-                      </div>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div onClick={() => window.open(`https://www.google.com/search?tbm=shop&q=${encodeURIComponent(it.m)}`, '_blank')}
-                          style={{ fontSize: 12, fontWeight: 600, color: "#6a1b9a", cursor: "pointer", textDecoration: "underline", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                          {it.m}
-                        </div>
-                        {it.w && <div style={{ fontSize: 10, color: "#888" }}><span style={{ color: tier, fontWeight: 700 }}>{(it.w || "").split(" · ")[0]}</span> {(it.w || "").includes(" · ") ? "· " + it.w.split(" · ").slice(1).join(" · ") : ""}</div>}
-                      </div>
-                      <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 12, fontWeight: 700, color: on ? "#6a1b9a" : "#999", flexShrink: 0 }}>{fmt(it.p)}</span>
-                      <button onClick={(e) => { e.stopPropagation(); delArredoItem(cat.cat, idx); }}
-                        style={{ width: 20, height: 20, borderRadius: 10, border: "none", background: "transparent", color: "#bbb", fontSize: 11, cursor: "pointer", flexShrink: 0, padding: 0 }}>✕</button>
-                    </div>
-                  );
-                })}
-                {addItemCatA === cat.cat && <AddItemForm onAdd={(m, p) => addArredoItem(cat.cat, m, p)} onCancel={() => setAddItemCatA(null)} />}
-                {cat.items.length === 0 && addItemCatA !== cat.cat && <div style={{ fontSize: 11, color: "#bbb", textAlign: "center", padding: 8 }}>Nessun prodotto — tocca + per aggiungere</div>}
-              </div>
-            );
-          })}
-          {!addCatOpenA ? (
-            <button onClick={() => setAddCatOpenA(true)}
-              style={{ width: "100%", padding: "12px", borderRadius: 10, border: "2px dashed #ce93d8", background: "transparent", color: "#6a1b9a", fontWeight: 700, fontSize: 13, cursor: "pointer", marginTop: 6 }}>
-              + Aggiungi categoria arredo
-            </button>
-          ) : (
-            <AddCatForm onAdd={addArredoCat} onCancel={() => setAddCatOpenA(false)} />
-          )}
-          {costoArredo > 0 && <div style={{ background: "#f3e5f5", borderRadius: 10, padding: 12, marginTop: 10 }}>
-            <CostRow label="TOTALE ARREDO" value={costoArredo} highlight />
+        <Section title="Stima Arredo" icon="🛋️" color="#6a1b9a" collapsed={sec.arredo} onToggle={() => tog("arredo")} badge={costoArredo > 0 ? fmt(costoArredo) : null}>
+          <TierPick value={cur.fT} onChange={v => upd("fT", v)} />
+          {FURN.map(i => <ItemRow key={i.id} item={i} on={!!cur.fOn[i.id]} toggle={() => toggleF(i.id)} tier={cur.fT} qty={furnQty(i, cur.nB)} accent="#6a1b9a" />)}
+          {costoArredo > 0 && <div style={{ background: "#f3e5f5", borderRadius: 10, padding: 12, marginTop: 12 }}>
+            <CostRow label={`TOTALE ARREDO (${TIER[cur.fT]})`} value={costoArredo} highlight />
             {bmOk ? <div style={{ marginTop: 6, fontSize: 10, color: "#4a148c" }}>🎁 Bonus Mobili: 50% su max €5.000 = {fmt(detrMob)} ({fmt(detrMobA)}/anno x 10){costoArredo > 5000 && <span style={{ display: "block", color: "#e65100" }}>⚠️ Tetto: €5.000</span>}</div>
             : costoReno === 0 ? <div style={{ marginTop: 6, fontSize: 10, color: "#e65100" }}>⚠️ Bonus Mobili: serve ristrutturazione</div> : null}
-          </div>}
-        </Section>
-
-        {/* ELETTRODOMESTICI */}
-        <Section title="Elettrodomestici" icon="🔌" color="#0d47a1" collapsed={sec.shop} onToggle={() => tog("shop")} badge={costoShop > 0 ? fmt(costoShop) : null}>
-          <p style={{ fontSize: 11, color: "#888", margin: "0 0 10px" }}>Tocca il nome per cercare il prezzo · Seleziona i prodotti · Aggiungi categorie e prodotti</p>
-          {shopList.map(cat => {
-            const sel = (cur.shopSel || {})[cat.cat] || [];
-            const validSel = sel.filter(idx => idx < cat.items.length);
-            const catCost = validSel.length > 0 ? Math.round(validSel.reduce((s, idx) => s + cat.items[idx].p, 0) / validSel.length) : 0;
-            return (
-              <div key={cat.cat} style={{ marginBottom: 14, borderBottom: "1px solid #e8e8e8", paddingBottom: 10 }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: "#0d47a1" }}>{cat.icon} {cat.label}</span>
-                  <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-                    {catCost > 0 && <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, fontWeight: 700, color: "#0d47a1", background: "#e3f2fd", padding: "2px 8px", borderRadius: 6 }}>
-                      {validSel.length > 1 ? "media " : ""}{fmt(catCost)}
-                    </span>}
-                    <button onClick={() => setAddItemCat(addItemCat === cat.cat ? null : cat.cat)}
-                      style={{ width: 24, height: 24, borderRadius: 12, border: "1px solid #90caf9", background: addItemCat === cat.cat ? "#1565c0" : "#e3f2fd", color: addItemCat === cat.cat ? "#fff" : "#1565c0", fontSize: 16, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1 }}>+</button>
-                    {cat.cat.startsWith("custom_") && <button onClick={() => { if(confirm("Eliminare " + cat.label + "?")) delShopCat(cat.cat); }}
-                      style={{ width: 24, height: 24, borderRadius: 12, border: "none", background: "#ffebee", color: "#c62828", fontSize: 12, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>}
-                  </div>
-                </div>
-                {cat.items.map((it, idx) => {
-                  const on = sel.includes(idx);
-                  return (
-                    <div key={idx} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4, padding: "6px 8px", borderRadius: 8, background: on ? "#e3f2fd" : "transparent", border: on ? "1px solid #90caf9" : "1px solid transparent", transition: "all 0.15s" }}>
-                      <div onClick={() => toggleShop(cat.cat, idx)} style={{ width: 22, height: 22, borderRadius: 6, border: `2px solid ${on ? "#1565c0" : "#ccc"}`, background: on ? "#1565c0" : "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
-                        {on && <span style={{ color: "#fff", fontSize: 14, fontWeight: 700, lineHeight: 1 }}>✓</span>}
-                      </div>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div onClick={() => window.open(`https://www.google.com/search?tbm=shop&q=${encodeURIComponent(it.m)}`, '_blank')}
-                          style={{ fontSize: 12, fontWeight: 600, color: "#1565c0", cursor: "pointer", textDecoration: "underline", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                          {it.m}
-                        </div>
-                        {it.w && <div style={{ fontSize: 10, color: "#888" }}><span style={{ color: (it.w||"").startsWith("Eco") ? "#4caf50" : (it.w||"").startsWith("Med") ? "#ff9800" : (it.w||"").startsWith("Pre") ? "#9c27b0" : "#888", fontWeight: 700 }}>{(it.w||"").split(" · ")[0]}</span>{(it.w||"").includes(" · ") ? " · " + it.w.split(" · ").slice(1).join(" · ") : ""}</div>}
-                      </div>
-                      <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 12, fontWeight: 700, color: on ? "#1565c0" : "#999", flexShrink: 0 }}>~{fmt(it.p)}</span>
-                      <button onClick={(e) => { e.stopPropagation(); delShopItem(cat.cat, idx); }}
-                        style={{ width: 20, height: 20, borderRadius: 10, border: "none", background: "transparent", color: "#bbb", fontSize: 11, cursor: "pointer", flexShrink: 0, padding: 0 }}>✕</button>
-                    </div>
-                  );
-                })}
-                {addItemCat === cat.cat && <AddItemForm onAdd={(m, p) => addShopItem(cat.cat, m, p)} onCancel={() => setAddItemCat(null)} />}
-                {cat.items.length === 0 && addItemCat !== cat.cat && <div style={{ fontSize: 11, color: "#bbb", textAlign: "center", padding: 8 }}>Nessun prodotto — tocca + per aggiungere</div>}
-              </div>
-            );
-          })}
-          {/* ADD CATEGORY */}
-          {!addCatOpen ? (
-            <button onClick={() => setAddCatOpen(true)}
-              style={{ width: "100%", padding: "12px", borderRadius: 10, border: "2px dashed #90caf9", background: "transparent", color: "#1565c0", fontWeight: 700, fontSize: 13, cursor: "pointer", marginTop: 6 }}>
-              + Aggiungi categoria
-            </button>
-          ) : (
-            <AddCatForm onAdd={addShopCat} onCancel={() => setAddCatOpen(false)} />
-          )}
-          {costoShop > 0 && <div style={{ background: "#e3f2fd", borderRadius: 10, padding: 12, marginTop: 10 }}>
-            <CostRow label="TOTALE LISTA SPESA" value={costoShop} highlight />
           </div>}
         </Section>
 
@@ -848,7 +444,7 @@ function App() {
           {prezzo === 0 ? <p style={{ fontSize: 12, color: "#999", textAlign: "center", padding: 16 }}>Inserisci il prezzo</p> : (<>
             <div style={{ marginBottom: 10 }}>
               <span style={{ fontSize: 10, fontWeight: 700, color: "#1565c0", textTransform: "uppercase" }}>Provvigione Agenzia</span>
-              <CostRow label={`Netta (${cur.provvPct || 4}%)`} value={provvN} detail={`${fmt(prezzo)} x ${cur.provvPct || 4}%`} />
+              <CostRow label={`Netta (${cur.provvPct != null ? cur.provvPct : 4}%)`} value={provvN} detail={`${fmt(prezzo)} x ${cur.provvPct != null ? cur.provvPct : 4}%`} />
               <CostRow label="IVA (22%)" value={provvIVA} />
               <CostRow label="Totale provvigione" value={provvT} highlight />
               <div style={{ fontSize: 10, color: "#666", marginTop: 3 }}>Detraz. 19%: {fmt(detrAg)}</div>
@@ -880,8 +476,7 @@ function App() {
               <CostRow label="Prezzo immobile" value={prezzo} detail={cur.offerta > 0 && cur.prezzoRich > 0 ? `Offerta (-${((1 - cur.offerta / cur.prezzoRich) * 100).toFixed(1)}% su ${fmt(cur.prezzoRich)})` : null} />
               <CostRow label="Spese acquisto" value={totSpAcq} />
               {costoRenoTot > 0 && <CostRow label={`Ristrutturazione (${TIER[cur.rT]})`} value={costoRenoTot} />}
-              {costoArredo > 0 && <CostRow label="Arredo" value={costoArredo} />}
-              {costoShop > 0 && <CostRow label="Elettrodomestici (Lista)" value={costoShop} />}
+              {costoArredo > 0 && <CostRow label={`Arredo (${TIER[cur.fT]})`} value={costoArredo} />}
               <div style={{ height: 2, background: "#ddd", margin: "6px 0" }} />
               <CostRow label="COSTO TOTALE" value={costoTot} highlight />
             </div>
@@ -926,7 +521,7 @@ function App() {
         )}
 
         <div style={{ fontSize: 9, color: "#aaa", textAlign: "center", padding: "12px 0", lineHeight: 1.5 }}>
-          CasaCalc v3.2 · Costi Roma 2025 · I dati restano sul tuo dispositivo
+          CasaCalc v2.1 · Costi Roma 2025 · I dati restano sul tuo dispositivo
         </div>
       </div>
     </div>
