@@ -172,11 +172,87 @@ const RENO = [
 ];
 
 const ARREDO_DEFAULTS = [
+  { cat: "cucina", icon: "🍽️", label: "Cucina: Ante Legno + Isola/Penisola", items: [
+    { m: "IKEA Metod ante Ekestad rovere 300cm", p: 4500, w: "Eco · Ante rovere naturale, penisola, top laminato" },
+    { m: "IKEA Metod ante Voxtorp noce+penisola", p: 5500, w: "Med · Legno chiaro liscio, penisola con sgabelli" },
+    { m: "Creo Kitchens Lube ante legno+penisola", p: 7000, w: "Med · Ante rovere, top quarzo, penisola" },
+    { m: "Scavolini Liberamente cucina+isola legno", p: 12000, w: "Pre · Isola con sgabelli, rovere+laccato" },
+    { m: "Franke Maris lavello acciaio 2 vasche", p: 250, w: "Med · Incasso, inox satinato" },
+    { m: "Franke Mythos lavello fragranite 1.5v", p: 450, w: "Pre · Sottotop, antigraffio" },
+  ]},
+  { cat: "scaff_cucina", icon: "🔩", label: "Scaffalatura Metallica Colorata Cucina", items: [
+    { m: "Scaffale tubo metallo verniciato su misura artigiano", p: 800, w: "Med · Tubolare acciaio, verniciato RAL giallo/blu" },
+    { m: "SimonRack scaffale metallo 200x100cm blu/legno", p: 120, w: "Eco · Industrial, 5 ripiani, legno+metallo blu" },
+    { m: "Leroy Merlin LUCA libreria metallo blu", p: 100, w: "Eco · 100x90cm, stile industrial, colori vari" },
+    { m: "USM Haller scaffale modulare giallo", p: 2500, w: "Pre · Design svizzero, modulare, colori RAL" },
+    { m: "Fabbro locale Roma struttura su misura", p: 1200, w: "Med · Tubo tondo/quadro verniciato, su disegno" },
+  ]},
+  { cat: "cappa_design", icon: "🌬️", label: "Cappa Metallo Colorato / Statement", items: [
+    { m: "Cappa artigianale tubo metallo colorato su misura", p: 600, w: "Med · Fabbro, tubo verniciato RAL, aspirante" },
+    { m: "Elica NikolaTesla piano aspirante", p: 800, w: "Pre · Nel piano, nessun ingombro sopra" },
+    { m: "Smeg KPF9 cappa parete Portofino colorata", p: 700, w: "Med · Disponibile in colori pastello/bold" },
+    { m: "Falmec Virgola incasso sottopensile", p: 250, w: "Eco · 60cm, nascosta, silenziosa" },
+    { m: "Faber Cylindra Isola colorata", p: 500, w: "Med · Cilindrica, sospesa, bianca/nera/rossa" },
+  ]},
+  { cat: "piastrelle_cucina", icon: "◻️", label: "Piastrelle Bianche Cucina (Subway/Metro)", items: [
+    { m: "Piastrelle metro bianche lucide 10x20", p: 12, w: "Eco · Classiche subway, smaltate, /mq" },
+    { m: "Equipe Evolution bianco matt 7.5x15", p: 25, w: "Med · Formato piccolo, bordo arrotondato, /mq" },
+    { m: "Marazzi Lume White 6x24", p: 30, w: "Med · Effetto fatto a mano, lucida, /mq" },
+    { m: "Cevica Zellige bianco 10x10", p: 45, w: "Pre · Effetto artigianale marocchino, /mq" },
+    { m: "Mutina Mattonelle Margherita 20.5x20.5", p: 80, w: "Pre · Design Nathalie Du Pasquier, /mq" },
+  ]},
+  { cat: "cementine_bagno", icon: "🔶", label: "Cementine Geometriche Bagno (J)", items: [
+    { m: "CASA39 gres cementine geometriche 20x20", p: 15, w: "Eco · Gres Made in Italy, /mq" },
+    { m: "Marazzi D_Segni Colore cementine 20x20", p: 35, w: "Med · Gres, pattern geometrici, /mq" },
+    { m: "Forma&Cemento cementine artigianali Roma", p: 120, w: "Pre · Fatte a mano, cemento+pigmenti, /mq" },
+    { m: "LeCementine.it artigianali su progetto Roma", p: 150, w: "Pre · Showroom Via Anicio Paolino, /mq" },
+    { m: "Equipe Art Nouveau colour 20x20", p: 30, w: "Med · Gres smaltato, geometrico, /mq" },
+    { m: "Mosaic Factory cementine custom", p: 90, w: "Med · Artigianali Marocco, 25 anni esperienza, /mq" },
+  ]},
+  { cat: "piastr_handmade", icon: "🎨", label: "Piastrelle Handmade Colorate (O)", items: [
+    { m: "Cevica Zellige mix colori 10x10", p: 50, w: "Med · Effetto artigianale, terracotta/cream/azzurro, /mq" },
+    { m: "Equipe Artisan colori misti 6.5x20", p: 35, w: "Med · Smaltatura irregolare handmade, /mq" },
+    { m: "Marazzi Crogiolo Rice colori 5x20", p: 40, w: "Med · Sfumature irregolari, fatto a mano, /mq" },
+    { m: "Cerasarda Pitrizza terracotta artigianale", p: 70, w: "Pre · Sardegna, ceramica tradizionale, /mq" },
+    { m: "Mutina Mattonelle Margherita colori", p: 80, w: "Pre · Du Pasquier, pattern ludici, /mq" },
+    { m: "Ceramica Sant'Agostino Patchwork Classic", p: 40, w: "Med · Mix decorati, gres, /mq" },
+  ]},
+  { cat: "porte_colore", icon: "🚪", label: "Porte Laccate Colorate (P)", items: [
+    { m: "Garofoli Porta laccata RAL colore su misura", p: 600, w: "Med · Laccato opaco, qualsiasi colore RAL" },
+    { m: "FerreroLegno Porte colorate laccate", p: 700, w: "Med · Made in Italy, filo muro disponibile" },
+    { m: "IKEA Pax anta Flisberget colorata", p: 200, w: "Eco · Ante laccate singole, colori vari" },
+    { m: "Lualdi porte laccate filo muro", p: 1500, w: "Pre · Filo muro, laccato policromo, design" },
+    { m: "Eclisse Syntesis + anta laccata colore", p: 500, w: "Med · Scorrevole scomparsa, laccata a scelta" },
+    { m: "Porta tamburata laccata falegname locale", p: 400, w: "Eco · Su misura, laccata RAL, artigianale" },
+  ]},
+  { cat: "sedie_colorate", icon: "🪑", label: "Sedie Colorate Miste (T)", items: [
+    { m: "HAY About a Chair AAC22 colori misti x4", p: 800, w: "Med · Polipropilene+legno, mix&match" },
+    { m: "Kartell Masters colori misti x4", p: 800, w: "Pre · Starck, iconiche, impilabili" },
+    { m: "IKEA Odger colori assortiti x4", p: 280, w: "Eco · Plastica riciclata, 5 colori" },
+    { m: "Muuto Fiber Chair colori x4", p: 1200, w: "Pre · Plastica riciclata, gambe legno" },
+    { m: "Thonet 209 colorate laccate x4", p: 1600, w: "Pre · Legno curvato, classico rivisitato" },
+    { m: "Calligaris Skin colori misti x4", p: 600, w: "Med · Polipropilene, gambe legno faggio" },
+  ]},
+  { cat: "tavolo", icon: "🍽️", label: "Tavolo Legno/Metallo (U)", items: [
+    { m: "IKEA Lisabo tavolo rovere 140cm", p: 250, w: "Eco · Rovere impiallacciato, gambe incrociate" },
+    { m: "IKEA Skogsta tavolo acacia 235cm", p: 500, w: "Eco · Legno massello, grande, gambe metallo" },
+    { m: "Calligaris Duca tavolo allungabile 130/190", p: 800, w: "Med · Rovere+metallo, allungabile" },
+    { m: "Hay CPH30 tavolo rovere 200cm", p: 1200, w: "Med · Rovere massello, gambe sottili" },
+    { m: "Bonaldo Big Table 200cm", p: 2200, w: "Pre · Piano noce/ceramica, gambe acciaio" },
+    { m: "Tavolo artigianale legno recupero+ferro", p: 900, w: "Med · Falegname locale, su misura, ferro+legno" },
+  ]},
+  { cat: "libreria", icon: "📚", label: "Libreria Moduli Legno (W)", items: [
+    { m: "IKEA Kallax 4x4 configurazione modulare", p: 150, w: "Eco · 147x147cm, nicchie quadrate, personalizzabile" },
+    { m: "IKEA Eket composizione a parete", p: 300, w: "Eco · Moduli misti, colori, asimmetrica" },
+    { m: "Muuto Stacked scaffale modulare", p: 1500, w: "Pre · Moduli asimmetrici, legno+laccato" },
+    { m: "String Pocket mensole modulari x3", p: 450, w: "Med · Metallo+legno, composizione libera" },
+    { m: "Falegname locale libreria compensato su misura", p: 1200, w: "Med · Betulla/rovere, nicchie irregolari, su disegno" },
+    { m: "USM Haller libreria modulare colori", p: 2800, w: "Pre · Modulare infinito, acciaio+pannelli" },
+  ]},
   { cat: "sanitari", icon: "🚿", label: "Sanitari + Rubinetteria", items: [
     { m: "Ideal Standard Tesi wc+bidet sospesi", p: 350, w: "Eco · Sospesi, sedile slim" },
     { m: "Grohe Eurosmart rubinetteria bagno set", p: 250, w: "Eco · Lavabo + bidet + doccia" },
     { m: "Roca The Gap wc+bidet sospesi Rimless", p: 550, w: "Med · Rimless, design pulito" },
-    { m: "Grohe Eurostyle rubinetteria bagno completa", p: 450, w: "Med · Miscelatori termostatici" },
     { m: "Duravit ME by Starck wc+bidet sospesi", p: 900, w: "Pre · Design Philippe Starck" },
     { m: "Hansgrohe Talis E rubinetteria set completo", p: 700, w: "Pre · EcoSmart, ComfortZone" },
   ]},
@@ -185,65 +261,20 @@ const ARREDO_DEFAULTS = [
     { m: "Leroy Merlin Remix mobile bagno 90cm", p: 350, w: "Eco · Sospeso, cassetti soft-close" },
     { m: "IKEA Hemnes mobile bagno 100cm", p: 700, w: "Med · Legno massello, specchio LED" },
     { m: "Scavolini Idro mobile bagno 100cm", p: 1500, w: "Pre · Design italiano, top minerale" },
-    { m: "Idea Group Dressy mobile bagno 120cm", p: 1800, w: "Pre · Doppio lavabo, laccato" },
-  ]},
-  { cat: "cucina", icon: "🍽️", label: "Cucina + Lavello + Isola", items: [
-    { m: "IKEA Knoxhult cucina 220cm", p: 2500, w: "Eco · Base+pensili+top, no elettrodom." },
-    { m: "Mondo Convenienza cucina 270cm", p: 2800, w: "Eco · Completa con top laminato" },
-    { m: "IKEA Metod cucina 300cm", p: 5000, w: "Med · Ante Voxtorp, top laminato HPL" },
-    { m: "Creo Kitchens Lube cucina 300cm", p: 7000, w: "Med · Ante laccate, top quarzo" },
-    { m: "Scavolini Liberamente cucina+isola", p: 12000, w: "Pre · Isola, top quarzo, soft-close" },
-    { m: "Franke Maris lavello acciaio 2 vasche", p: 250, w: "Med · Incasso, acciaio inox satinato" },
-    { m: "Franke Mythos lavello fragranite 1.5v", p: 450, w: "Pre · Sottotop, antigraffio" },
   ]},
   { cat: "camera", icon: "🛏️", label: "Camera: Letto + Comodini + Armadio", items: [
-    { m: "IKEA Malm letto matrimoniale 160", p: 250, w: "Eco · Struttura con contenitore" },
-    { m: "IKEA Malm comodini x2", p: 100, w: "Eco · 2 cassetti, bianco/rovere" },
-    { m: "IKEA Pax armadio 200cm", p: 600, w: "Eco · Ante scorrevoli, accessori interni" },
-    { m: "Mondo Conv. camera completa", p: 1200, w: "Eco · Letto+comodini+armadio" },
+    { m: "IKEA Malm letto matr. 160 + contenitore", p: 250, w: "Eco · Contenitore, bianco/rovere" },
+    { m: "IKEA Malm comodini x2", p: 100, w: "Eco · 2 cassetti" },
+    { m: "IKEA Pax armadio 200cm ante scorrevoli", p: 600, w: "Eco · Accessori interni inclusi" },
     { m: "Maisons du Monde letto Fjord 160", p: 500, w: "Med · Testiera imbottita" },
-    { m: "Lago Fluttua letto sospeso 160", p: 2500, w: "Pre · Design, effetto fluttuante" },
-    { m: "Poliform armadio Bangkok", p: 4000, w: "Pre · Ante complanari, vetro" },
-  ]},
-  { cat: "sala", icon: "🪑", label: "Sala: Tavolo + Sedie", items: [
-    { m: "IKEA Ekedalen tavolo allungabile 120/180", p: 300, w: "Eco · 4-6 persone, robusto" },
-    { m: "IKEA Karljan sedie x4", p: 120, w: "Eco · Polipropilene, impilabili" },
-    { m: "Calligaris Baron tavolo 130/190", p: 900, w: "Med · Allungabile, vetro/ceramica" },
-    { m: "Calligaris Boheme sedie x4", p: 600, w: "Med · Imbottite, metallo+tessuto" },
-    { m: "Bonaldo Big Table 200cm", p: 2200, w: "Pre · Piano noce/ceramica, design" },
-    { m: "Kartell Masters sedie x4", p: 800, w: "Pre · Philippe Starck, iconiche" },
+    { m: "Lago Fluttua letto sospeso 160", p: 2500, w: "Pre · Effetto fluttuante, design" },
   ]},
   { cat: "living", icon: "🛋️", label: "Living: Divano Letto", items: [
     { m: "IKEA Friheten divano letto angolare", p: 500, w: "Eco · Contenitore, 230cm, chaise" },
     { m: "IKEA Vimle divano letto 3 posti", p: 700, w: "Eco · Sfoderabile, materasso schiuma" },
     { m: "Poltrone Sofà divano letto 3 posti", p: 1200, w: "Med · Rete a doghe, materasso 14cm" },
-    { m: "Mondo Conv. divano letto contenitore", p: 600, w: "Eco · Ecopelle/tessuto, box" },
     { m: "Natuzzi Editions divano letto B883", p: 2000, w: "Pre · Pelle, meccanismo italiano" },
     { m: "Dorelan divano letto Slim materasso HR", p: 2500, w: "Pre · Materasso alto, uso quotidiano" },
-  ]},
-  { cat: "rivestimenti", icon: "🧱", label: "Rivestimenti + Pavimenti", items: [
-    { m: "Marazzi D_Segni Colore cementine 20x20", p: 35, w: "Med · Gres effetto cementina, geometrici, /mq" },
-    { m: "CASA39 gres cementine 20x20", p: 15, w: "Eco · Gres Made in Italy da 7€/mq, /mq" },
-    { m: "Forma&Cemento cementine artigianali", p: 120, w: "Pre · Fatte a mano Roma, cemento+pigmenti, /mq" },
-    { m: "LeCementine.it artigianali su progetto", p: 150, w: "Pre · Showroom Roma, personalizzabili, /mq" },
-    { m: "Equipe Hexatile Cement gres 20x20", p: 35, w: "Med · Esagonali effetto cemento, /mq" },
-    { m: "Parquet rovere naturale listoni 14mm", p: 45, w: "Med · Prefinito, oliato, 180x1200mm, /mq" },
-    { m: "Piastrelle bianche metro 10x20 cucina", p: 12, w: "Eco · Stile subway, lucide/matt, /mq" },
-  ]},
-  { cat: "porte_colore", icon: "🚪", label: "Porte + Pareti Scorrevoli", items: [
-    { m: "Garofoli Porta laccata colorata RAL", p: 600, w: "Med · Su misura, laccato opaco, qualsiasi colore" },
-    { m: "Eclisse Syntesis scorrevole scomparsa", p: 400, w: "Med · Controtelaio rasomuro, cartongesso" },
-    { m: "Scrigno Essential scorrevole interno", p: 350, w: "Eco · Controtelaio, anta esclusa" },
-    { m: "Rimadesio Graphis scorrevole vetro", p: 2500, w: "Pre · Alluminio+vetro, design italiano" },
-    { m: "IKEA Pax Sekken ante vetro satinato", p: 300, w: "Eco · Effetto parete vetro, 150cm" },
-    { m: "Henry Glass porta scorrevole vetro", p: 1200, w: "Med · Vetro temperato, profilo ferro nero" },
-  ]},
-  { cat: "serramenti_ferro", icon: "🪟", label: "Serramenti Ferro + Vetrate", items: [
-    { m: "Parete vetrata ferro stile atelier", p: 1500, w: "Med · Ferro verniciato+vetro, su misura, /mq" },
-    { m: "Porta vetrata ferro industrial 90x210", p: 800, w: "Med · Profilo ferro 30mm, vetro singolo" },
-    { m: "Crittall finestra ferro originale", p: 2500, w: "Pre · Brand storico inglese, su misura" },
-    { m: "Parete divisoria ferro+vetro IKEA hack", p: 300, w: "Eco · Profili IKEA verniciati nero, DIY" },
-    { m: "Officine Tamborrino vetrata artigianale", p: 2000, w: "Pre · Artigianale Roma, ferro battuto" },
   ]},
 ];
 
@@ -895,7 +926,7 @@ function App() {
         )}
 
         <div style={{ fontSize: 9, color: "#aaa", textAlign: "center", padding: "12px 0", lineHeight: 1.5 }}>
-          CasaCalc v3.1 · Costi Roma 2025 · I dati restano sul tuo dispositivo
+          CasaCalc v3.2 · Costi Roma 2025 · I dati restano sul tuo dispositivo
         </div>
       </div>
     </div>
